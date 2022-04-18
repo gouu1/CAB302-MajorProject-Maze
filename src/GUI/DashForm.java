@@ -1,3 +1,5 @@
+package GUI;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -31,8 +33,7 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
         }
 
         if (src == newButton) {
-            JOptionPane.showMessageDialog(this, "I do nothing, please fix me!", "Fix Me!",
-                    JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(new NewMazeForm(this, "New Maze", true));
         }
 
         if (src == exportButton) {

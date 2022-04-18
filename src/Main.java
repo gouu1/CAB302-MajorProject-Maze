@@ -1,3 +1,5 @@
+import GUI.DashForm;
+
 import javax.swing.*;
 
 public class Main {
