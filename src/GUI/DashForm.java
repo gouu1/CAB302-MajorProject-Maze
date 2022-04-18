@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 350;
     public static final int HEIGHT = 350;
     public static final int PANELS = 4;
+    public static final int FONT_SIZE = 24;
     private JPanel[] panels;
     private JButton exitButton, exportButton, newButton, openButton;
     private JLabel title;
@@ -79,10 +81,12 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         fc = new JFileChooser();
+        Action details = fc.getActionMap().get("viewTypeDetails");
+        details.actionPerformed(null);
 
         title = new JLabel("MazeCo");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font("Arial", Font.PLAIN, 24));
+        title.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
 
         panels = new JPanel[PANELS];
         String[] positions = {BorderLayout.EAST, BorderLayout.WEST,

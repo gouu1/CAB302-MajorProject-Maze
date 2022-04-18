@@ -36,6 +36,14 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         if (src == newMazeButton) {
             JOptionPane.showMessageDialog(this, "I do nothing, please fix me!", "Fix Me!",
                     JOptionPane.ERROR_MESSAGE);
+
+            // TODO Check for defaults
+            if (mazeNameField.getText().isBlank() || mazeX.getText().isBlank() || mazeY.getText().isBlank()) {
+                JOptionPane.showMessageDialog(this,
+                        "Please enter a valid maze name and/or dimensions!", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            System.out.println(mazeNameField.getName());
         }
     }
 
@@ -51,6 +59,8 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         fc = new JFileChooser();
+        Action details = fc.getActionMap().get("viewTypeDetails");
+        details.actionPerformed(null);
 
         childrenCheck = new JCheckBox("Children's maze");
         randomCheck = new JCheckBox("Randomized maze");
@@ -60,12 +70,8 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
 
         mazeNameField = new JTextField("Add maze name here...");
         mazeNameField.setMinimumSize(new Dimension(200, 20));
-        mazeX = new JTextField("x");
-        mazeY = new JTextField("y");
-        mazeY.setMaximumSize(new Dimension(50,20));
-        mazeX.setMaximumSize(new Dimension(50,20));
-        mazeX.setHorizontalAlignment(SwingConstants.RIGHT);
-        mazeY.setHorizontalAlignment(SwingConstants.RIGHT);
+        mazeX = createTextField("x");
+        mazeY = createTextField("y");
 
         px1 = new JLabel("px");
         px2 = new JLabel("px");
@@ -110,7 +116,17 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
 
     public JButton createButton(String text) {
         JButton myButton = new JButton(text);
+
         myButton.addActionListener(this);
         return myButton;
+    }
+
+    public JTextField createTextField(String text) {
+        JTextField myField = new JTextField(text);
+        myField.setMaximumSize(new Dimension(50,20));
+        myField.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        myField.addActionListener(this);
+        return myField;
     }
 }
