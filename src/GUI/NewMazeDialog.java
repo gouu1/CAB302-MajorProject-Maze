@@ -1,13 +1,12 @@
 package GUI;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class NewMazeForm extends JDialog implements ActionListener, Runnable {
+public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 175;
     private JCheckBox childrenCheck, randomCheck;
@@ -16,14 +15,14 @@ public class NewMazeForm extends JDialog implements ActionListener, Runnable {
     private JLabel px1, px2, imageLabel;
     private JFileChooser fc;
 
-    public NewMazeForm(JFrame parent, String title, boolean modality) {
+    public NewMazeDialog(JFrame parent, String title, boolean modality) {
         super(parent, title, modality);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
-        //Consider the alternatives - not all active at once.
+
         if (src == addLogoButton) {
             int returnValue = fc.showOpenDialog(getContentPane());
             if (returnValue == JFileChooser.APPROVE_OPTION) {

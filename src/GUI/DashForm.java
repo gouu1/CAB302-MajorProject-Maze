@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class DashForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 350;
@@ -13,6 +14,7 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
     private JPanel[] panels;
     private JButton exitButton, exportButton, newButton, openButton;
     private JLabel title;
+    private JFileChooser fc;
 
     /**
      * Adapted from the Week 5 prac.
@@ -20,25 +22,38 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        //Get event source
         Object src = e.getSource();
         //Consider the alternatives - not all active at once.
         if (src == exitButton) {
             System.exit(0);
         }
 
+        // TODO much code to be added here
         if (src == openButton) {
-            JOptionPane.showMessageDialog(this, "I do nothing, please fix me!", "Fix Me!",
-                    JOptionPane.ERROR_MESSAGE);
+            if (fc.showOpenDialog(getContentPane()) == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                System.out.println("Opening: " + file.getName() + ".");
+            } else {
+                System.out.println("Open command cancelled by user.");
+            }
+        }
+
+        // TODO do some actual file I/O
+        if (src == exportButton) {
+            fc.setMultiSelectionEnabled(true);
+            if (fc.showOpenDialog(getContentPane()) == JFileChooser.APPROVE_OPTION) {
+                File[] file = fc.getSelectedFiles();
+                String msg = "File: " + "MultiSelection not enabled yet :(" + " has been exported!";
+                JOptionPane.showMessageDialog(this, msg, "Success!",
+                        JOptionPane.PLAIN_MESSAGE);
+            } else {
+                System.out.println("Open command cancelled by user.");
+            }
+            fc.setMultiSelectionEnabled(false);
         }
 
         if (src == newButton) {
-            SwingUtilities.invokeLater(new NewMazeForm(this, "New Maze", true));
-        }
-
-        if (src == exportButton) {
-            JOptionPane.showMessageDialog(this, "I do nothing, please fix me!", "Fix Me!",
-                    JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(new NewMazeDialog(this, "New Maze", true));
         }
     }
 
@@ -51,17 +66,19 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
      * Adapted from the week 5 prac
      */
     public void createGUI() {
-        setTitle("Maze designer - Dashboard");
-        setSize(WIDTH, HEIGHT);
-        setLayout(new BorderLayout());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | InstantiationException |
                 ClassNotFoundException | IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        setTitle("Maze designer - Dashboard");
+        setSize(WIDTH, HEIGHT);
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        fc = new JFileChooser();
 
         title = new JLabel("MazeCo");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
