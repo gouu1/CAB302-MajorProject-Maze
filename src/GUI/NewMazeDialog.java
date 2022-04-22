@@ -42,8 +42,13 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid maze name and/or dimensions!", "Error!",
                         JOptionPane.ERROR_MESSAGE);
+            } else {
+                System.out.println(mazeNameField.getText());
+
+                SwingUtilities.invokeLater(new MazeEditForm(mazeNameField.getText(),
+                        new Dimension(Integer.parseInt(mazeX.getText()), Integer.parseInt(mazeY.getText()))));
+                dispose();
             }
-            System.out.println(mazeNameField.getName());
         }
     }
 
@@ -57,6 +62,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         setLayout(layout);
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(getContentPane());
 
         fc = new JFileChooser();
         Action details = fc.getActionMap().get("viewTypeDetails");

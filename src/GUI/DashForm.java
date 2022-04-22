@@ -79,7 +79,9 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
         setSize(WIDTH, HEIGHT);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
+        // Creates a file chooser that opens on detail view by default
         fc = new JFileChooser();
         Action details = fc.getActionMap().get("viewTypeDetails");
         details.actionPerformed(null);
@@ -111,10 +113,6 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
         southPanel.setLayout(new BorderLayout());
         midPanel.setLayout(new BoxLayout(midPanel, BoxLayout.Y_AXIS));
 
-        // TODO Remove this when you get rid of the backgrounds.
-//        southPanel.setOpaque(false);
-        midPanel.setOpaque(false);
-
         southPanel.add(exitButton, BorderLayout.EAST);
         southPanel.add(exportButton, BorderLayout.WEST);
         midPanel.add(title);
@@ -130,9 +128,6 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
 
     public JPanel createPanel() {
         JPanel myPanel = new JPanel();
-
-        // TODO Remove colour once the layout is finished.
-//        myPanel.setBackground(Color.BLACK);
         myPanel.setBorder(new EmptyBorder(20, 10, 30, 10));
         return myPanel;
     }
