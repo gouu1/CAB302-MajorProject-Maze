@@ -122,7 +122,6 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
         midPanel.add(openButton);
 
         repaint();
-//        pack();
         setVisible(true);
     }
 

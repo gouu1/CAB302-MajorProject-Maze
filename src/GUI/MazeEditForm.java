@@ -5,6 +5,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 800;
@@ -15,6 +16,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private final String titleString;
     private JPanel mainPanel, toolsPanel;
     private JButton addLogoButton, returnButton, saveButton, saveAsButton;
+    private JFileChooser fileChooser;
 
 
     public MazeEditForm(String mazeName, Dimension mazeSize) {
@@ -28,7 +30,25 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Object src = e.getSource();
 
+        if (src == returnButton) {
+            dispose(); // TODO check if any changes have been made?
+        }
+
+        if (src == saveButton) {
+            // TODO
+        }
+
+        if (src == saveAsButton) {
+            int returnValue = fileChooser.showOpenDialog(getContentPane());
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                System.out.println("Opening:" + file.getName() + ".");
+            } else {
+                System.out.println("Open command cancelled by user.");
+            }
+        }
     }
 
     public void createGUI() {
@@ -46,7 +66,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        makeFileChooser();
+        fileChooser = makeFileChooser();
 
         // Make labels
         ImageIcon draw = createImageIcon("images/pencil.png", "Edit");
@@ -64,10 +84,10 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         separatorTop = new JSeparator();
 
         // Make buttons
-        addLogoButton = new JButton("Add Logo");
-        saveButton = new JButton("Save");
-        saveAsButton = new JButton("Save As");
-        returnButton = new JButton("Return");
+        addLogoButton = createButton("Add Logo");
+        saveButton = createButton("Save");
+        saveAsButton = createButton("Save As");
+        returnButton = createButton("Return");
 
         // Setup border layout
         mainPanel = new JPanel(); // TODO maybe add scroll pane??
@@ -113,10 +133,17 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         setVisible(true);
     }
 
-    public void makeFileChooser() {
+    public JFileChooser makeFileChooser() {
         JFileChooser fc = new JFileChooser();
         Action details = fc.getActionMap().get("viewTypeDetails");
         details.actionPerformed(null);
+        return fc;
+    }
+
+    private JButton createButton(String title) {
+        JButton myButton = new JButton(title);
+        myButton.addActionListener(this);
+        return myButton;
     }
 
     /** Returns an ImageIcon, or null if the path was invalid.
