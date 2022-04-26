@@ -34,11 +34,8 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         }
 
         if (src == newMazeButton) {
-            JOptionPane.showMessageDialog(this, "I do nothing, please fix me!", "Fix Me!",
-                    JOptionPane.ERROR_MESSAGE);
-
-            // TODO Check for defaults
-            if (mazeNameField.getText().isBlank() || mazeX.getText().isBlank() || mazeY.getText().isBlank()) {
+            if (mazeNameField.getText().isBlank() || mazeX.getText().isBlank() || mazeY.getText().isBlank() ||
+                   checker(mazeX.getText()) || checker(mazeY.getText())) {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid maze name and/or dimensions!", "Error!",
                         JOptionPane.ERROR_MESSAGE);
@@ -132,5 +129,15 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
 
         myField.addActionListener(this);
         return myField;
+    }
+
+    private boolean checker(String str) {
+        char[] ch = str.toCharArray();
+        for (char c : ch) {
+            if (!Character.isLetter(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
