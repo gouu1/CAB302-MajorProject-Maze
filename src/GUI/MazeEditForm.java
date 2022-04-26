@@ -11,16 +11,19 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     private static final int FONT_SIZE = 16;
-    private JLabel titleLabel, drawIcon, eraseIcon, selectIcon;
-    private JSeparator separatorTop;
+    private JLabel drawIcon; // TODO make these labels clickable
+    private JLabel eraseIcon;
+    private JLabel selectIcon;
     private final String titleString;
-    private JPanel mainPanel, toolsPanel;
+    private final String mazeName;
+    private JPanel mainPanel;
     private JButton addLogoButton, returnButton, saveButton, saveAsButton;
     private JFileChooser fileChooser;
 
 
     public MazeEditForm(String mazeName, Dimension mazeSize) {
         titleString = "Maze Editor - " + mazeName + " (" + mazeSize.width + ", " + mazeSize.height + ")";
+        this.mazeName = mazeName;
     }
 
     @Override
@@ -37,14 +40,25 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
 
         if (src == saveButton) {
-            // TODO
+            // TODO make this overwrite the save on the current file
+            System.out.println("Saving: " + mazeName + ".someFileEnding");
         }
 
         if (src == saveAsButton) {
+            int returnValue = fileChooser.showSaveDialog(getContentPane()); // TODO make this try and save a new copy and auto name it
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                System.out.println("Saving:" + file.getName()); // TODO make this actually save a file
+            } else {
+                System.out.println("Open command cancelled by user.");
+            }
+        }
+
+        if (src == addLogoButton) {
             int returnValue = fileChooser.showOpenDialog(getContentPane());
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                System.out.println("Opening:" + file.getName() + ".");
+                System.out.println("Opening:" + file.getName());
             } else {
                 System.out.println("Open command cancelled by user.");
             }
@@ -73,7 +87,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         ImageIcon erase = createImageIcon("images/eraser.png", "Erase");
         ImageIcon select = createImageIcon("images/select.png", "Select");
 
-        titleLabel = new JLabel("Tools");
+        JLabel titleLabel = new JLabel("Tools");
         titleLabel.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
 
         drawIcon = new JLabel(draw);
@@ -81,7 +95,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         selectIcon = new JLabel(select);
 
         // Make separator
-        separatorTop = new JSeparator();
+        JSeparator separatorTop = new JSeparator();
 
         // Make buttons
         addLogoButton = createButton("Add Logo");
@@ -92,7 +106,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         // Setup border layout
         mainPanel = new JPanel(); // TODO maybe add scroll pane??
         mainPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        toolsPanel = new JPanel();
+        JPanel toolsPanel = new JPanel();
         getContentPane().add(mainPanel, BorderLayout.CENTER);
         getContentPane().add(toolsPanel, BorderLayout.EAST);
 

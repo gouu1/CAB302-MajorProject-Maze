@@ -27,7 +27,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
             int returnValue = fc.showOpenDialog(getContentPane());
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                System.out.println("Opening:" + file.getName() + ".");
+                System.out.println("Opening:" + file.getName());
             } else {
                 System.out.println("Open command cancelled by user.");
             }
