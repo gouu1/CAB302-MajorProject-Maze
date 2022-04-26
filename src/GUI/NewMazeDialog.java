@@ -27,23 +27,23 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
             int returnValue = fc.showOpenDialog(getContentPane());
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                System.out.println("Opening:" + file.getName() + ".");
+                System.out.println("Opening:" + file.getName());
             } else {
                 System.out.println("Open command cancelled by user.");
             }
         }
 
         if (src == newMazeButton) {
-            JOptionPane.showMessageDialog(this, "I do nothing, please fix me!", "Fix Me!",
-                    JOptionPane.ERROR_MESSAGE);
-
-            // TODO Check for defaults
-            if (mazeNameField.getText().isBlank() || mazeX.getText().isBlank() || mazeY.getText().isBlank()) {
+            if (mazeNameField.getText().isBlank() || mazeX.getText().isBlank() || mazeY.getText().isBlank() ||
+                   checker(mazeX.getText()) || checker(mazeY.getText())) {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid maze name and/or dimensions!", "Error!",
                         JOptionPane.ERROR_MESSAGE);
+            } else {
+                SwingUtilities.invokeLater(new MazeEditForm(mazeNameField.getText(),
+                        new Dimension(Integer.parseInt(mazeX.getText()), Integer.parseInt(mazeY.getText())))); // yuck
+                dispose();
             }
-            System.out.println(mazeNameField.getName());
         }
     }
 
@@ -57,6 +57,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         setLayout(layout);
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(getContentPane());
 
         fc = new JFileChooser();
         Action details = fc.getActionMap().get("viewTypeDetails");
@@ -128,5 +129,15 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
 
         myField.addActionListener(this);
         return myField;
+    }
+
+    private boolean checker(String str) {
+        char[] ch = str.toCharArray();
+        for (char c : ch) {
+            if (!Character.isLetter(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
