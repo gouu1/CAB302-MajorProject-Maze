@@ -58,7 +58,6 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getContentPane());
-
         fc = new JFileChooser();
         Action details = fc.getActionMap().get("viewTypeDetails");
         details.actionPerformed(null);

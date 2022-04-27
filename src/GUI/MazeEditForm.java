@@ -20,10 +20,15 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private JButton addLogoButton, returnButton, saveButton, saveAsButton;
     private JFileChooser fileChooser;
 
+    private int mazeWidth = 0;
+    private int mazeHeight = 0;
+
 
     public MazeEditForm(String mazeName, Dimension mazeSize) {
         titleString = "Maze Editor - " + mazeName + " (" + mazeSize.width + ", " + mazeSize.height + ")";
         this.mazeName = mazeName;
+        this.mazeHeight = mazeSize.height;
+        this.mazeWidth = mazeSize.width;
     }
 
     @Override
@@ -64,6 +69,48 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             }
         }
     }
+    public void displayMaze()
+    {
+
+    }
+    public void generateMaze()
+    {
+        // Set up the icons
+        ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
+        ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
+
+        int[][] startingMaze = new int[this.mazeWidth][this.mazeHeight];
+
+        for (int i = 0; i < this.mazeWidth; i++)
+        {
+            for (int j = 0; j < this.mazeHeight; j++)
+            {
+                startingMaze[i][j] = 0;
+            }
+        }
+        Maze maze = new Maze();
+        maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
+        System.out.println(maze.maze[2][2]);
+
+        JButton[][] mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
+        for (int i = 0; i < this.mazeWidth; i++)
+        {
+            for (int j = 0; j < this.mazeHeight; j++)
+            {
+                if (maze.maze[i][j] == 0)
+                {
+                    mazeButtons[i][j] = new JButton(blackSquare);
+                    mazeButtons[i][j].setBounds(16*i,16*j,16,16);
+                }
+                else
+                {
+                    mazeButtons[i][j] = new JButton(whiteSquare);
+                    mazeButtons[i][j].setBounds(16*i,16*j,16,16);
+                }
+                getContentPane().add(mazeButtons[i][j]);
+            }
+        }
+    }
 
     public void createGUI() {
         try {
@@ -72,13 +119,14 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 ClassNotFoundException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
         // Initial setup for form
         setTitle(titleString);
         setSize(WIDTH, HEIGHT);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        generateMaze();
 
         fileChooser = makeFileChooser();
 
