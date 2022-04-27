@@ -57,9 +57,6 @@ public class Maze {
             {
                 maze[nx][ny] = 2;
                 maze[cx + dir.dx][cy + dir.dy] = 2;
-                //System.out.println(nx);
-                //System.out.println(ny);
-                //System.out.println();
                 generateMaze(nx, ny);
             }
         }

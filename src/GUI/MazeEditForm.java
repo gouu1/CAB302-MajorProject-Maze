@@ -88,6 +88,14 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 startingMaze[i][j] = 0;
             }
         }
+
+        startingMaze[2][2] = -1;
+        startingMaze[2][3] = -1;
+        startingMaze[3][3] = -1;
+        startingMaze[3][2] = -1;
+        startingMaze[4][3] = -1;
+        startingMaze[4][2] = -1;
+
         Maze maze = new Maze();
         maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
         System.out.println(maze.maze[2][2]);
@@ -97,7 +105,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         {
             for (int j = 0; j < this.mazeHeight; j++)
             {
-                if (maze.maze[i][j] == 0)
+                if (maze.maze[i][j] == 0 || maze.maze[i][j] == -1)
                 {
                     mazeButtons[i][j] = new JButton(blackSquare);
                     mazeButtons[i][j].setBounds(16*i,16*j,16,16);
