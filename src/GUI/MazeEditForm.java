@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+/**
+ * Form that allows users to edit and save mazes
+ */
 public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -33,11 +36,18 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
     }
 
+    /**
+     * Runs the main driver of the form, which is the createGUI() function
+     */
     @Override
     public void run() {
         createGUI();
     }
 
+    /**
+     * Even listener that executes code based on the source of an event.
+     * @param e - the event which has occurred
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
@@ -87,6 +97,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
     }
 
+    /**
+     * Iterates through the maze and creates green path for maze cells that have been marked as
+     * the solution of the maze.
+     * @param solvedMazeDisplay - a solved maze
+     */
     public void UpdateMazeDisplay(int[][] solvedMazeDisplay)
     {
         ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");

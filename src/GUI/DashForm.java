@@ -2,12 +2,14 @@ package GUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+/**
+ * The main GUI form which will spawn all subsequent forms and handle the event listening.
+ */
 public class DashForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 350;
     public static final int HEIGHT = 350;
@@ -19,7 +21,8 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
     private JFileChooser fc;
 
     /**
-     * Adapted from the Week 5 prac.
+     * Adapted from the Week 5 prac. Takes an event e and checks the source of the event.
+     * Different actions based on the source of the event are then executed here.
      * @param e - event
      */
     @Override
@@ -65,7 +68,8 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
     }
 
     /**
-     * Adapted from the week 5 prac
+     * Adapted from the week 5 prac. Generates a Java Swing form that utilises a Border layout and
+     * Box layout for the center panel to create a responsive Dashboard form.
      */
     public void createGUI() {
         try {
@@ -125,12 +129,22 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
         setVisible(true);
     }
 
+    /**
+     * Creates a panel for the dash form.
+     * @return A JPanel component with a predefined border
+     */
     public JPanel createPanel() {
         JPanel myPanel = new JPanel();
         myPanel.setBorder(new EmptyBorder(20, 10, 30, 10));
         return myPanel;
     }
 
+    /**
+     * Creates a baseline look for all buttons on the dash form
+     * @param dim - Dimensions of the button
+     * @param text - The text to be display on the button
+     * @return - A Button with an action listener and layout set
+     */
     public JButton createButton(Dimension dim, String text) {
         JButton myButton = new JButton(text);
         myButton.setPreferredSize(dim);

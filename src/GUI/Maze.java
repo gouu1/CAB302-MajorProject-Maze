@@ -21,6 +21,10 @@ public class Maze {
         generateMaze(0, 0);
     }
 
+    /**
+     *
+     * @param startMaze
+     */
     public void startUp(int[][] startMaze)
     {
         for (int i = 0; i < y; i++)
@@ -46,6 +50,11 @@ public class Maze {
         }
     }
 
+    /**
+     *
+     * @param cx
+     * @param cy
+     */
     private void generateMaze(int cx, int cy) {
         DIR[] dirs = DIR.values();
         Collections.shuffle(Arrays.asList(dirs));
@@ -62,6 +71,12 @@ public class Maze {
         }
     }
 
+    /**
+     *
+     * @param startPoint
+     * @param endPoint
+     * @return
+     */
     public int[][] solveMaze(int[] startPoint, int[] endPoint) {
         int[][] solvedMaze = new int[this.x][this.y];
         int[][] solvedMazeDisplay = new int[this.x][this.y];
@@ -164,10 +179,19 @@ public class Maze {
         return solvedMazeDisplay;
     }
 
+    /**
+     * Indicates whether a value is between 0 and some upper value
+     * @param v - value to be checked
+     * @param upper - upper bound of the check (exclusive)
+     * @return - true is v is between 0 and upper, false otherwise.
+     */
     private static boolean between(int v, int upper) {
         return (v >= 0) && (v < upper);
     }
 
+    /**
+     *
+     */
     private enum DIR {
         N(1, 0, -1), S(2, 0, 1), E(4, 1, 0), W(8, -1, 0);
         private final int bit;
