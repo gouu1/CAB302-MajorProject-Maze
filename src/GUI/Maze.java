@@ -62,6 +62,108 @@ public class Maze {
         }
     }
 
+    public int[][] solveMaze(int[] startPoint, int[] endPoint) {
+        int[][] solvedMaze = new int[this.x][this.y];
+        int[][] solvedMazeDisplay = new int[this.x][this.y];
+
+        for (int i = 0; i < x; i++)
+        {
+            for (int j = 0; j < y; j++) {
+                solvedMaze[i][j] = -maze[i][j];
+                solvedMazeDisplay[i][j] = -maze[i][j];
+            }
+        }
+
+        solvedMaze[startPoint[0]][startPoint[1]] = 1;
+
+        while(solvedMaze[endPoint[0]][endPoint[1]] == -2)
+        {
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < y; j++)
+                {
+                    if (solvedMaze[i][j] == -2)
+                    {
+                        int max = 0;
+                        if (i > 0)
+                        {
+                            if (max < solvedMaze[i-1][j])
+                            {
+                                max = solvedMaze[i-1][j];
+                            }
+                        }
+                        if (i < x-1)
+                        {
+                            if (max < solvedMaze[i+1][j])
+                            {
+                                max = solvedMaze[i+1][j];
+                            }
+                        }
+                        if (j > 0)
+                        {
+                            if (max < solvedMaze[i][j-1])
+                            {
+                                max = solvedMaze[i][j-1];
+                            }
+                        }
+                        if (j < y-1)
+                        {
+                            if (max < solvedMaze[i][j+1])
+                            {
+                                max = solvedMaze[i][j+1];
+                            }
+                        }
+                        if (max > 0) {
+                            solvedMaze[i][j] = max + 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println(solvedMaze[endPoint[0]][endPoint[1]]);
+
+        int[] nextPoint = {endPoint[0], endPoint[1]};
+        int choice = 0;
+        for (int i = 0; i < solvedMaze[endPoint[0]][endPoint[1]]; i++)
+        {
+            choice = 0;
+            solvedMazeDisplay[nextPoint[0]][nextPoint[1]] = 1;
+            if (nextPoint[0] > 0 && choice == 0)
+            {
+                if (solvedMaze[nextPoint[0]-1][nextPoint[1]] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]-1][nextPoint[1]] > 0)
+                {
+                    nextPoint[0] = nextPoint[0]-1;
+                    choice = 1;
+                }
+            }
+            if (nextPoint[0] < x-1 && choice == 0)
+            {
+                if (solvedMaze[nextPoint[0]+1][nextPoint[1]] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]+1][nextPoint[1]] > 0)
+                {
+                    nextPoint[0] = nextPoint[0]+1;
+                    choice = 1;
+                }
+            }
+            if (nextPoint[1] > 0 && choice == 0)
+            {
+                if (solvedMaze[nextPoint[0]][nextPoint[1]-1] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]][nextPoint[1]-1] > 0)
+                {
+                    nextPoint[1] = nextPoint[1]-1;
+                    choice = 1;
+                }
+            }
+            if (nextPoint[1] < y-1 && choice == 0)
+            {
+                if (solvedMaze[nextPoint[0]][nextPoint[1]+1] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]][nextPoint[1]+1] > 0)
+                {
+                    nextPoint[1] = nextPoint[1]+1;
+                }
+            }
+        }
+        return solvedMazeDisplay;
+    }
+
     private static boolean between(int v, int upper) {
         return (v >= 0) && (v < upper);
     }

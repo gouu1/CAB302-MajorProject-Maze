@@ -17,9 +17,10 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private final String titleString;
     private final String mazeName;
     private JPanel mainPanel;
-    private JButton addLogoButton, returnButton, saveButton, saveAsButton;
+    private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton;
     private JFileChooser fileChooser;
-
+    private Maze maze = new Maze();
+    private JButton[][] mazeButtons;// = new JButton[this.mazeWidth][this.mazeHeight];
     private int mazeWidth = 0;
     private int mazeHeight = 0;
 
@@ -29,6 +30,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         this.mazeName = mazeName;
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
+        mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
     }
 
     @Override
@@ -68,11 +70,38 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 System.out.println("Open command cancelled by user.");
             }
         }
-    }
-    public void displayMaze()
-    {
 
+        if (src == solveButton) {
+            int[] startPoint = {0,0};
+            int[] endPoint = {this.mazeWidth-1,this.mazeHeight-1};
+            if (this.mazeWidth % 2 == 0)
+            {
+                endPoint[0] = endPoint[0]-1;
+            }
+            if (this.mazeHeight % 2 == 0)
+            {
+                endPoint[1] = endPoint[1]-1;
+            }
+            int[][] solvedMazeDisplay = maze.solveMaze(startPoint,endPoint);
+            UpdateMazeDisplay(solvedMazeDisplay);
+        }
     }
+
+    public void UpdateMazeDisplay(int[][] solvedMazeDisplay)
+    {
+        ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
+        for (int i = 0; i < this.mazeWidth; i++)
+        {
+            for (int j = 0; j < this.mazeHeight; j++)
+            {
+                if (solvedMazeDisplay[i][j] == 1)
+                {
+                    mazeButtons[i][j].setIcon(greenSquare);
+                }
+            }
+        }
+    }
+
     public void generateMaze()
     {
         // Set up the icons
@@ -89,18 +118,18 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             }
         }
 
+        /*
         startingMaze[2][2] = -1;
         startingMaze[2][3] = -1;
         startingMaze[3][3] = -1;
         startingMaze[3][2] = -1;
         startingMaze[4][3] = -1;
         startingMaze[4][2] = -1;
+        */
 
-        Maze maze = new Maze();
         maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
         System.out.println(maze.maze[2][2]);
-
-        JButton[][] mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
+        int cubeSize = 8;
         for (int i = 0; i < this.mazeWidth; i++)
         {
             for (int j = 0; j < this.mazeHeight; j++)
@@ -108,12 +137,12 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 if (maze.maze[i][j] == 0 || maze.maze[i][j] == -1)
                 {
                     mazeButtons[i][j] = new JButton(blackSquare);
-                    mazeButtons[i][j].setBounds(16*i,16*j,16,16);
+                    mazeButtons[i][j].setBounds(cubeSize*i,cubeSize*j,cubeSize,cubeSize);
                 }
                 else
                 {
                     mazeButtons[i][j] = new JButton(whiteSquare);
-                    mazeButtons[i][j].setBounds(16*i,16*j,16,16);
+                    mazeButtons[i][j].setBounds(cubeSize*i,cubeSize*j,cubeSize,cubeSize);
                 }
                 getContentPane().add(mazeButtons[i][j]);
             }
@@ -158,6 +187,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         saveButton = createButton("Save");
         saveAsButton = createButton("Save As");
         returnButton = createButton("Return");
+        solveButton = createButton("Solve");
 
         // Setup border layout
         mainPanel = new JPanel(); // TODO maybe add scroll pane??
@@ -179,6 +209,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             .addComponent(titleLabel)
                             .addComponent(eraseIcon)
                             .addComponent(addLogoButton)
+                            .addComponent(solveButton)
                             .addComponent(separatorTop)
                             .addComponent(saveButton)
                             .addComponent(saveAsButton)
@@ -192,6 +223,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             .addComponent(eraseIcon)
                             .addComponent(selectIcon))
                     .addComponent(addLogoButton)
+                    .addComponent(solveButton)
                     .addComponent(separatorTop)
                     .addComponent(saveButton)
                     .addComponent(saveAsButton)
