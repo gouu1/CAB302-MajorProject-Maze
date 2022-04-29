@@ -26,7 +26,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
 
-        if (src == addLogoButton) {
+        if (src == addLogoButton) { //TODO Consolidate all logo pickers into their own class to reduce repeat code
             int returnValue = fc.showOpenDialog(getContentPane());
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
@@ -37,8 +37,10 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         }
 
         if (src == newMazeButton) {
-            if (mazeNameField.getText().isBlank() || mazeX.getText().isBlank() || mazeY.getText().isBlank() ||
-                   checker(mazeX.getText()) || checker(mazeY.getText())) {
+            if (mazeNameField.getText().isBlank() ||
+                    mazeX.getText().isBlank() || mazeY.getText().isBlank() ||
+                    checker(mazeX.getText()) || checker(mazeY.getText())) {
+
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid maze name and/or dimensions!", "Error!",
                         JOptionPane.ERROR_MESSAGE);
