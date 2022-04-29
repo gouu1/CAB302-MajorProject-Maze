@@ -32,7 +32,7 @@ public class Maze {
      * Generates the grid used by the maze generation algorithm, indicates where paths should come from and go to
      * @param startMaze The base map used, dimensions (x,y)
      */
-    public void startUp(int[][] startMaze)
+    private void startUp(int[][] startMaze)
     {
         for (int i = 0; i < y; i++)
         {
@@ -51,7 +51,7 @@ public class Maze {
                 }
                 else
                 {
-                    maze[j][i] = -1;
+                    maze[j][i] = 0;
                 }
             }
         }
