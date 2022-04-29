@@ -117,6 +117,9 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
     }
 
+    /**
+     * Runs the maze generation script and places the maze buttons on the editing panel
+     */
     public void generateMaze()
     {
         // Set up the icons
