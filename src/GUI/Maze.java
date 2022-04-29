@@ -5,14 +5,22 @@ import java.util.Arrays;
 
 /*
  * recursive backtracking algorithm
- * shamelessly borrowed from the ruby at
+ * adapted from the ruby at
  * http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
  */
 public class Maze {
+
     private int x;
     private int y;
     public int[][] maze;
 
+    /**
+     *
+     * This is the function called to generate new mazes.
+     * @param startMaze The base maze provided to the maze generator. This would include areas blocked out by logos
+     * @param x The size of the maze in the x axis
+     * @param y The size of the maze in the y axis
+     */
     public void MazeGenerator(int[][] startMaze, int x, int y) {
         this.x = x;
         this.y = y;
@@ -21,7 +29,11 @@ public class Maze {
         generateMaze(0, 0);
     }
 
-    public void startUp(int[][] startMaze)
+    /**
+     * This function produces the maze grid from an existing base maze
+     * @param startMaze The base maze provided to the maze generator. This would include areas blocked out by logos
+     */
+    private void startUp(int[][] startMaze)
     {
         for (int i = 0; i < y; i++)
         {
@@ -40,11 +52,17 @@ public class Maze {
                 }
                 else
                 {
-                    maze[j][i] = -1;
+                    maze[j][i] = 0;
                 }
             }
         }
     }
+
+    /**
+     * This function iterates over the maze grid produced in the startUp method and connects the paths together
+     * @param cx The current x position used
+     * @param cy The current y position used
+     */
 
     private void generateMaze(int cx, int cy) {
         DIR[] dirs = DIR.values();
@@ -62,6 +80,12 @@ public class Maze {
         }
     }
 
+    /**
+     * This function iterates over a generated maze and creates a solution path
+     * @param startPoint The starting point to solve from
+     * @param endPoint The ending point to solve to
+     * @return This function returns a solved maze path in the same dimensions as the input maze
+     */
     public int[][] solveMaze(int[] startPoint, int[] endPoint) {
         int[][] solvedMaze = new int[this.x][this.y];
         int[][] solvedMazeDisplay = new int[this.x][this.y];
@@ -164,6 +188,12 @@ public class Maze {
         return solvedMazeDisplay;
     }
 
+    /**
+     * This function checks if the given point is on a border or not
+     * @param v The current point
+     * @param upper The upper boundary
+     * @return True if it is not on a border and false if it is
+     */
     private static boolean between(int v, int upper) {
         return (v >= 0) && (v < upper);
     }

@@ -117,16 +117,29 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 startingMaze[i][j] = 0;
             }
         }
-
         /*
-        startingMaze[2][2] = -1;
-        startingMaze[2][3] = -1;
-        startingMaze[3][3] = -1;
-        startingMaze[3][2] = -1;
-        startingMaze[4][3] = -1;
-        startingMaze[4][2] = -1;
+        for (int i = 30; i < 60; i++)
+        {
+            for (int j = 30; j < 60; j++)
+            {
+                startingMaze[i][j] = -1;
+            }
+        }
+        for (int i = 10; i < 20; i++)
+        {
+            for (int j = 10; j < 20; j++)
+            {
+                startingMaze[i][j] = -1;
+            }
+        }
+        for (int i = 70; i < 100; i++)
+        {
+            for (int j = 70; j < 90; j++)
+            {
+                startingMaze[i][j] = -1;
+            }
+        }
         */
-
         maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
         System.out.println(maze.maze[2][2]);
         int cubeSize = 8;
