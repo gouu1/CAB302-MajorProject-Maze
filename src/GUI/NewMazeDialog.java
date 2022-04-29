@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+/**
+ * A dialog form that will query basic information about a maze before it is created in the maze editor
+ */
 public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 175;
@@ -52,6 +55,10 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         createGUI();
     }
 
+    /**
+     * Creates the maze dialog GUI using a GroupLayout with items in the form linked for consistent relative sizing
+     * regardless of the window size.
+     */
     public void createGUI() {
         GroupLayout layout = new GroupLayout(getContentPane());
         setLayout(layout);
@@ -114,6 +121,11 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         setVisible(true);
     }
 
+    /**
+     * Generates a button with an action listener and text.
+     * @param text - The text to displayed on the button
+     * @return - A button with set text and action listener
+     */
     public JButton createButton(String text) {
         JButton myButton = new JButton(text);
 
@@ -121,6 +133,11 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         return myButton;
     }
 
+    /**
+     * Creates a text field for user input of the maze dimensions
+     * @param text - Text to be displayed in the field
+     * @return - A text field with preset text
+     */
     public JTextField createTextField(String text) {
         JTextField myField = new JTextField(text);
         myField.setMaximumSize(new Dimension(50,20));
@@ -130,6 +147,11 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         return myField;
     }
 
+    /**
+     * Simply checks whether a given string contains only letters.
+     * @param str - String to be checked
+     * @return - True if the string contains only letters, false otherwise.
+     */
     private boolean checker(String str) {
         char[] ch = str.toCharArray();
         for (char c : ch) {

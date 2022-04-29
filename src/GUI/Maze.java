@@ -5,22 +5,14 @@ import java.util.Arrays;
 
 /*
  * recursive backtracking algorithm
- * adapted from the ruby at
+ * shamelessly borrowed from the ruby at
  * http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
  */
 public class Maze {
-
     private int x;
     private int y;
     public int[][] maze;
 
-    /**
-     *
-     * This is the function called to generate new mazes.
-     * @param startMaze The base maze provided to the maze generator. This would include areas blocked out by logos
-     * @param x The size of the maze in the x axis
-     * @param y The size of the maze in the y axis
-     */
     public void MazeGenerator(int[][] startMaze, int x, int y) {
         this.x = x;
         this.y = y;
@@ -30,10 +22,10 @@ public class Maze {
     }
 
     /**
-     * This function produces the maze grid from an existing base maze
-     * @param startMaze The base maze provided to the maze generator. This would include areas blocked out by logos
+     *
+     * @param startMaze
      */
-    private void startUp(int[][] startMaze)
+    public void startUp(int[][] startMaze)
     {
         for (int i = 0; i < y; i++)
         {
@@ -52,18 +44,17 @@ public class Maze {
                 }
                 else
                 {
-                    maze[j][i] = 0;
+                    maze[j][i] = -1;
                 }
             }
         }
     }
 
     /**
-     * This function iterates over the maze grid produced in the startUp method and connects the paths together
-     * @param cx The current x position used
-     * @param cy The current y position used
+     *
+     * @param cx
+     * @param cy
      */
-
     private void generateMaze(int cx, int cy) {
         DIR[] dirs = DIR.values();
         Collections.shuffle(Arrays.asList(dirs));
@@ -81,10 +72,10 @@ public class Maze {
     }
 
     /**
-     * This function iterates over a generated maze and creates a solution path
-     * @param startPoint The starting point to solve from
-     * @param endPoint The ending point to solve to
-     * @return This function returns a solved maze path in the same dimensions as the input maze
+     *
+     * @param startPoint
+     * @param endPoint
+     * @return
      */
     public int[][] solveMaze(int[] startPoint, int[] endPoint) {
         int[][] solvedMaze = new int[this.x][this.y];
@@ -189,15 +180,18 @@ public class Maze {
     }
 
     /**
-     * This function checks if the given point is on a border or not
-     * @param v The current point
-     * @param upper The upper boundary
-     * @return True if it is not on a border and false if it is
+     * Indicates whether a value is between 0 and some upper value
+     * @param v - value to be checked
+     * @param upper - upper bound of the check (exclusive)
+     * @return - true is v is between 0 and upper, false otherwise.
      */
     private static boolean between(int v, int upper) {
         return (v >= 0) && (v < upper);
     }
 
+    /**
+     *
+     */
     private enum DIR {
         N(1, 0, -1), S(2, 0, 1), E(4, 1, 0), W(8, -1, 0);
         private final int bit;
