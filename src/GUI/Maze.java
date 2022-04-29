@@ -13,6 +13,13 @@ public class Maze {
     private int y;
     public int[][] maze;
 
+    /**
+     * Generates a maze from a base map, this base map would indicate where the logos would be placed for the
+     * maze to generate around
+     * @param startMaze The base map used, dimensions (x,y)
+     * @param x The x dimension of the maze
+     * @param y The y dimension of the maze
+     */
     public void MazeGenerator(int[][] startMaze, int x, int y) {
         this.x = x;
         this.y = y;
@@ -22,8 +29,8 @@ public class Maze {
     }
 
     /**
-     *
-     * @param startMaze
+     * Generates the grid used by the maze generation algorithm, indicates where paths should come from and go to
+     * @param startMaze The base map used, dimensions (x,y)
      */
     public void startUp(int[][] startMaze)
     {
@@ -51,9 +58,9 @@ public class Maze {
     }
 
     /**
-     *
-     * @param cx
-     * @param cy
+     * Iterates over the grid map to fill it up with paths, once all paths are filled it stops iterating
+     * @param cx The current x location
+     * @param cy The current y location
      */
     private void generateMaze(int cx, int cy) {
         DIR[] dirs = DIR.values();
@@ -72,10 +79,10 @@ public class Maze {
     }
 
     /**
-     *
-     * @param startPoint
-     * @param endPoint
-     * @return
+     * Iterates over the generated maze to produce a solution path
+     * @param startPoint The start point to solve from
+     * @param endPoint The end point to solve to
+     * @return A solution map with indicates the path to take to solve the maze
      */
     public int[][] solveMaze(int[] startPoint, int[] endPoint) {
         int[][] solvedMaze = new int[this.x][this.y];
