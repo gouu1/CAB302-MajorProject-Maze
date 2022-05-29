@@ -13,7 +13,6 @@ public class FileExporter {
      * Constructor for the FileExporter class, populations the file array of mazes to be exported
      */
     public FileExporter() {
-
     }
 
     /**
