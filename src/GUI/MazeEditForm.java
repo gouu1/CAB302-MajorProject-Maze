@@ -22,7 +22,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private JPanel mainPanel;
     private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton;
     private JFileChooser fileChooser;
-    private Maze maze = new Maze();
+    private Maze maze;
     private JButton[][] mazeButtons;// = new JButton[this.mazeWidth][this.mazeHeight];
     private int mazeWidth = 0;
     private int mazeHeight = 0;
@@ -34,6 +34,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
+        maze = new Maze(mazeName, "dummy author"); //TODO make authorship work
     }
 
     /**

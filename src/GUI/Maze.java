@@ -1,5 +1,8 @@
 package GUI;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Arrays;
 
@@ -11,7 +14,61 @@ import java.util.Arrays;
 public class Maze {
     private int x;
     private int y;
+    private String timeCreated;
+    private String timeEdited;
+    private String title, author;
     public int[][] maze;
+    private final DateTimeFormatter myDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final DateTimeFormatter myDateTimeFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+    public Maze() {}
+
+    public Maze(String title, String author) {
+        this.title = title;
+        this.author = author;
+        timeCreated = LocalDate.now().format(myDateFormat);
+        timeEdited = LocalDateTime.now().format(myDateTimeFormat);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getTimeCreated() {
+        return timeCreated;
+    }
+
+    public String getTimeEdited() {
+        return timeEdited;
+    }
+
+    public int[][] getMaze() {
+        return maze;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setTimeCreated(String timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public void setTimeEdited(String timeEdited) {
+        this.timeEdited = timeEdited;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setMaze(int[][] maze) {
+        this.maze = maze;
+    }
 
     /**
      * Generates a maze from a base map, this base map would indicate where the logos would be placed for the
