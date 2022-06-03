@@ -35,12 +35,7 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
 
         // TODO much code to be added here
         if (src == openButton) {
-            if (fc.showOpenDialog(getContentPane()) == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                System.out.println("Opening: " + file.getName());
-            } else {
-                System.out.println("Open command cancelled by user.");
-            }
+            SwingUtilities.invokeLater(new OpenFileDialog(this, "Open Maze", true, false));
         }
 
         // TODO do some actual file I/O
