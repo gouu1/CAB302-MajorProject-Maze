@@ -13,14 +13,14 @@ public class JDBCMazeDataSource {
     public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS " +
                     "mazes (idx INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */ NOT NULL UNIQUE," +
-                    "mazeData VARCHAR(50000)" + // idkkkkk
+                    "mazeData VARCHAR(50000)," +
                     "title VARCHAR(30)," +
                     "author VARCHAR(30)," +
                     "dateLastModified VARCHAR(30)," +
-                    "dataCreated VARCHAR(30)" + ");";
+                    "dateCreated VARCHAR(30)" + ");";
 
-    private static final String INSERT_MAZE = "INSERT INTO mazes (mazeData, title, author, dateLastModified, dataCreated) VALUES (?, ?, ?, ?, ?);";
-    private static final String GET_MAZE = "SELECT * WHERE title=?";
+    private static final String INSERT_MAZE = "INSERT INTO mazes (mazeData, title, author, dateLastModified, dateCreated) VALUES (?, ?, ?, ?, ?);";
+    private static final String GET_MAZE = "SELECT * FROM mazes WHERE title=?";
     private static final String DELETE_MAZE = "DELETE FROM mazes WHERE title=?";
 
     public JDBCMazeDataSource() {
@@ -53,7 +53,7 @@ public class JDBCMazeDataSource {
         Maze maze = new Maze();
         ResultSet rs = null;
         try {
-            getMaze.setString(2, title);
+            getMaze.setString(1, title);
             rs = getMaze.executeQuery();
             rs.next();
             maze.setMaze((int[][]) deStringify(rs.getString("mazeData")));
