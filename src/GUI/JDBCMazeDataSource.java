@@ -12,6 +12,7 @@ public class JDBCMazeDataSource {
     private PreparedStatement getMaze;
     private PreparedStatement getAll;
     private PreparedStatement deleteMaze;
+    private PreparedStatement countRows;
 
     public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS " +
@@ -26,6 +27,7 @@ public class JDBCMazeDataSource {
     private static final String GET_MAZE = "SELECT * FROM mazes WHERE title=?";
     private static final String GET_ALL = "SELECT title, author, dateLastModified, dateCreated FROM mazes";
     private static final String DELETE_MAZE = "DELETE FROM mazes WHERE title=?";
+    private static final String COUNT_ROWS = "SELECT COUNT(*) FROM mazes";
 
     public JDBCMazeDataSource() {
         connection = DBConnection.getInstance();
@@ -36,6 +38,7 @@ public class JDBCMazeDataSource {
             getMaze = connection.prepareStatement(GET_MAZE);
             getAll = connection.prepareStatement(GET_ALL);
             deleteMaze = connection.prepareStatement(DELETE_MAZE);
+            countRows = connection.prepareStatement(COUNT_ROWS);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -80,7 +83,10 @@ public class JDBCMazeDataSource {
             rs = getAll.executeQuery();
             while(rs.next()) {
                 list.add(new String[] {
-                        rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4)
                 });
             }
         } catch (SQLException e) {
@@ -116,6 +122,20 @@ public class JDBCMazeDataSource {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public int countRows() {
+        int rows = 0;
+        ResultSet rs = null;
+
+        try {
+            rs = countRows.executeQuery();
+            if (rs.next()) rows = rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rows;
     }
 
     public void close() {

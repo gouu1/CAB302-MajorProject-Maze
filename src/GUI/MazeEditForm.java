@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
+
+import static GUI.DashForm.source;
 
 /**
  * Form that allows users to edit and save mazes
@@ -58,18 +61,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
 
         if (src == saveButton) {
-            // TODO make this overwrite the save on the current file
-            System.out.println("Saving: " + mazeName + ".someFileEnding");
+            source.addMaze(maze);
         }
 
         if (src == saveAsButton) {
-            int returnValue = fileChooser.showSaveDialog(getContentPane()); // TODO make this try and save a new copy and auto name it
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                System.out.println("Saving:" + file.getName()); // TODO make this actually save a file
-            } else {
-                System.out.println("Open command cancelled by user.");
-            }
+            // TODO - change name and save as new name
         }
 
         if (src == addLogoButton) {

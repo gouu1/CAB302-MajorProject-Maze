@@ -5,8 +5,9 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
+
+import static GUI.DashForm.source;
 
 /**
  * Helper for opening image files
@@ -14,13 +15,10 @@ import java.util.ArrayList;
 public class OpenFileDialog extends JDialog implements ActionListener, Runnable {
     public static final int WIDTH = 700;
     public static final int HEIGHT = 300;
-    public static boolean saveFlag;
-    private JButton getRowButton, closeButton;
-    private JTable table;
-    private JDBCMazeDataSource source;
-
-
-    private static final String[] columnNames = {
+    private final Mode mode;
+    private JButton getRowButton, closeButton, exportButton;
+    private final JTable table;
+    private final String[] columnNames = {
                                     "Title",
                                     "Author",
                                     "Date Created",
@@ -30,15 +28,14 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
     /**
      * Creates the dialog and assigns its parent content pane
      */
-    public OpenFileDialog(JFrame parent, String title, boolean modality, boolean save) {
+    public OpenFileDialog(JFrame parent, String title, boolean modality, Mode mode) {
         super(parent, title, modality);
-        saveFlag = save;
-
-        source = new JDBCMazeDataSource();
+        this.mode = mode;
         ArrayList<String[]> temp = source.getMazeList();
 
         data = new Object[temp.size()][columnNames.length];
 
+        // Populates the data variable
         int i = 0;
         for (String[] sa : temp) {
             data[i++] = sa;
@@ -51,10 +48,18 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         Object src = e.getSource();
 
         if (src == closeButton) {
-            source.close();
             dispose();
         }
 
+        if (src == getRowButton) {
+            Maze maze = source.getMaze("title");
+            source.addMaze(maze);
+            System.out.println(maze.getTitle() + maze.getAuthor());
+        }
+
+        if (src == exportButton) {
+            System.out.println("todo");
+        }
 
     }
 
@@ -71,15 +76,12 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         setLocationRelativeTo(getContentPane());
 
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // only one item to be selected at a time
-        table.setSize(new Dimension(WIDTH, (int)(HEIGHT * 0.7))); // TODO this might not do anything
+        table.setAutoCreateRowSorter(true);
 
         JScrollPane scrollPane = new JScrollPane(table);
         JPanel southPanel = new JPanel(new BorderLayout());
 
-
         closeButton = createButton("Close");
-        closeButton.addActionListener(this);
-        getRowButton = createButton("Open maze");
 
         Border border = BorderFactory.createLoweredSoftBevelBorder();
 
@@ -87,7 +89,7 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         add(southPanel, BorderLayout.SOUTH);
         southPanel.setBorder(border);
         southPanel.add(closeButton, BorderLayout.EAST);
-        southPanel.add(getRowButton, BorderLayout.WEST);
+        southPanel.add(getSelection(), BorderLayout.WEST);
 
         repaint();
         setVisible(true);
@@ -95,25 +97,17 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
 
     private JButton createButton(String text) {
         JButton myButton = new JButton(text);
-        Dimension buttonDim = new Dimension(90, 30);
+        Dimension buttonDim = new Dimension(100, 30);
         myButton.setPreferredSize(buttonDim);
+        myButton.addActionListener(this);
         return myButton;
     }
 
-    /**
-     * Checks if the file is a valid image file.
-     * @return - true if the file is an image file, false otherwise.
-     */
-    private boolean isImageFile() {
-        return false;
+    private JButton getSelection() {
+        return switch (mode) {
+            case OPEN -> getRowButton = createButton("Open maze");
+            case EXPORT -> exportButton = createButton("Export mazes");
+            default -> null;
+        };
     }
-
-    /**
-     * Gets the user selected file
-     * @return - The file opened by the user.
-     */
-    public File getFile() {
-        return null;
-    }
-
 }

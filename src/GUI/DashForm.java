@@ -5,7 +5,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 /**
  * The main GUI form which will spawn all subsequent forms and handle the event listening.
@@ -19,6 +18,7 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
     private JButton exitButton, exportButton, newButton, openButton;
     private JLabel title;
     private JFileChooser fc;
+    public static JDBCMazeDataSource source = new JDBCMazeDataSource();
 
     /**
      * Adapted from the Week 5 prac. Takes an event e and checks the source of the event.
@@ -30,26 +30,26 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
         Object src = e.getSource();
         //Consider the alternatives - not all active at once.
         if (src == exitButton) {
+            source.close();
             System.exit(0);
         }
 
-        // TODO much code to be added here
         if (src == openButton) {
-            SwingUtilities.invokeLater(new OpenFileDialog(this, "Open Maze", true, false));
+            if (source.countRows() == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Database is empty, please add a maze!", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            else SwingUtilities.invokeLater(new OpenFileDialog(this, "Open Maze", true, Mode.OPEN));
         }
 
-        // TODO do some actual file I/O
         if (src == exportButton) {
-            fc.setMultiSelectionEnabled(true);
-            if (fc.showOpenDialog(getContentPane()) == JFileChooser.APPROVE_OPTION) {
-                File[] file = fc.getSelectedFiles();
-                String msg = "File: " + "MultiSelection not enabled yet :(" + " has been exported!";
-                JOptionPane.showMessageDialog(this, msg, "Success!",
-                        JOptionPane.PLAIN_MESSAGE);
-            } else {
-                System.out.println("Open command cancelled by user.");
+            if (source.countRows() == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Database is empty, please add a maze!", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
             }
-            fc.setMultiSelectionEnabled(false);
+            else SwingUtilities.invokeLater(new OpenFileDialog(this, "Export Maze", true, Mode.EXPORT));
         }
 
         if (src == newButton) {
