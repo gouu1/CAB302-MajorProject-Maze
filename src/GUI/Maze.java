@@ -54,10 +54,20 @@ public class Maze {
         this.title = title;
     }
 
+    public void setTimeCreated(LocalDate timeCreated) {
+        this.timeCreated = timeCreated.format(myDateFormat);
+    }
+
+    // Overload of other function for use in DB
     public void setTimeCreated(String timeCreated) {
         this.timeCreated = timeCreated;
     }
 
+    public void setTimeEdited(LocalDateTime timeEdited) {
+        this.timeEdited = timeEdited.format(myDateTimeFormat);
+    }
+
+    // Overload of other function for use in DB
     public void setTimeEdited(String timeEdited) {
         this.timeEdited = timeEdited;
     }

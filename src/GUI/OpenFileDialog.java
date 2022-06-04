@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Helper for opening image files
@@ -15,22 +16,16 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
     public static final int HEIGHT = 300;
     public static boolean saveFlag;
     private JButton getRowButton, closeButton;
-    private JTable table = new JTable(data, columnNames);
+    private JTable table;
+    private JDBCMazeDataSource source;
+
 
     private static final String[] columnNames = {
                                     "Title",
                                     "Author",
                                     "Date Created",
                                     "Date Last Modified"};
-
-    private static final Object[][] data = { // dummy data
-            {"Kathy", "Smith", "Snowboarding", 5},
-            {"John", "Doe", "Rowing", 3},
-            {"Sue", "Black", "Knitting",2},
-            {"Jane", "White", "Speed reading", 20},
-            {"Joe", "Brown", "Pool", 10}
-    };
-
+    private Object[][] data;
 
     /**
      * Creates the dialog and assigns its parent content pane
@@ -38,11 +33,29 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
     public OpenFileDialog(JFrame parent, String title, boolean modality, boolean save) {
         super(parent, title, modality);
         saveFlag = save;
+
+        source = new JDBCMazeDataSource();
+        ArrayList<String[]> temp = source.getMazeList();
+
+        data = new Object[temp.size()][columnNames.length];
+
+        int i = 0;
+        for (String[] sa : temp) {
+            data[i++] = sa;
+        }
+        table = new JTable(data, columnNames);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
+
+        if (src == closeButton) {
+            source.close();
+            dispose();
+        }
+
+
     }
 
     @Override
@@ -65,6 +78,7 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
 
 
         closeButton = createButton("Close");
+        closeButton.addActionListener(this);
         getRowButton = createButton("Open maze");
 
         Border border = BorderFactory.createLoweredSoftBevelBorder();

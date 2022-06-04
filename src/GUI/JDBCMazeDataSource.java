@@ -1,13 +1,16 @@
-import GUI.Maze;
+package GUI;
 
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Set;
 
 public class JDBCMazeDataSource {
     private Connection connection;
     private PreparedStatement addMaze;
     private PreparedStatement getMaze;
+    private PreparedStatement getAll;
     private PreparedStatement deleteMaze;
 
     public static final String CREATE_TABLE =
@@ -21,6 +24,7 @@ public class JDBCMazeDataSource {
 
     private static final String INSERT_MAZE = "INSERT INTO mazes (mazeData, title, author, dateLastModified, dateCreated) VALUES (?, ?, ?, ?, ?);";
     private static final String GET_MAZE = "SELECT * FROM mazes WHERE title=?";
+    private static final String GET_ALL = "SELECT title, author, dateLastModified, dateCreated FROM mazes";
     private static final String DELETE_MAZE = "DELETE FROM mazes WHERE title=?";
 
     public JDBCMazeDataSource() {
@@ -30,6 +34,7 @@ public class JDBCMazeDataSource {
             st.execute(CREATE_TABLE);
             addMaze = connection.prepareStatement(INSERT_MAZE);
             getMaze = connection.prepareStatement(GET_MAZE);
+            getAll = connection.prepareStatement(GET_ALL);
             deleteMaze = connection.prepareStatement(DELETE_MAZE);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -65,6 +70,23 @@ public class JDBCMazeDataSource {
             ex.printStackTrace();
         }
         return maze;
+    }
+
+    public ArrayList<String[]> getMazeList() {
+        ArrayList<String[]> list = new ArrayList<>();
+        ResultSet rs = null;
+
+        try {
+            rs = getAll.executeQuery();
+            while(rs.next()) {
+                list.add(new String[] {
+                        rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     /** Read the object from Base64 string.
