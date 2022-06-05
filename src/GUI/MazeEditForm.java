@@ -22,14 +22,17 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private final String titleString;
     private final String mazeName;
     private JPanel mainPanel;
-    private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton;
+    private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton;
     private JFileChooser fileChooser;
     private Maze maze = new Maze();
-    private JButton[][] mazeButtons;// = new JButton[this.mazeWidth][this.mazeHeight];
+    private JButton[][] mazeButtons;
     private int mazeWidth = 0;
     private int mazeHeight = 0;
     private int showSolution = 0;
     private int cubeSize;
+    private int[] startPoint = null;
+    private int[] endPoint = null;
+    private int setType = 0;
 
     private ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
     private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
@@ -119,35 +122,45 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 System.out.println("Open command cancelled by user.");
             }
         }
-
-        if (src == solveButton) {
-            int[] startPoint = {0,0};
-            int[] endPoint = {this.mazeWidth-1,this.mazeHeight-1};
-            if (this.mazeWidth % 2 == 0)
-            {
-                endPoint[0] = endPoint[0]-1;
-            }
-            if (this.mazeHeight % 2 == 0)
-            {
-                endPoint[1] = endPoint[1]-1;
-            }
-            //try{
-            int[][] solvedMazeDisplay = maze.solveMaze(startPoint,endPoint);
-
-            if (solvedMazeDisplay == null)
-            {
-                System.out.println("Maze is unsolvable");
-
-                JOptionPane.showMessageDialog(this,
-                        "The maze is unsolvable!", "Error!",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {
-                UpdateMazeDisplay(solvedMazeDisplay);
-            }
+        if (src == setStartButton)
+        {
+            setType = 1;
+            System.out.println("Set Start");
+        }
+        if (src == setEndButton)
+        {
+            setType = 2;
+            System.out.println("Set End");
         }
 
+        if (src == solveButton) {
+            if(this.startPoint == null)
+            {
+                JOptionPane.showMessageDialog(this,
+                        "Please set a start point", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            else if(this.endPoint == null)
+            {
+                JOptionPane.showMessageDialog(this,
+                        "Please set an end point", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                //try{
+                int[][] solvedMazeDisplay = maze.solveMaze(this.startPoint, this.endPoint);
+
+                if (solvedMazeDisplay == null) {
+                    System.out.println("Maze is unsolvable");
+
+                    JOptionPane.showMessageDialog(this,
+                            "The maze is unsolvable!", "Error!",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    UpdateMazeDisplay(solvedMazeDisplay);
+                }
+            }
+        }
 
         for (int i = 0; i < this.mazeWidth; i++)
         {
@@ -155,7 +168,20 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             {
                 if (src == mazeButtons[i][j])
                 {
-                    UpdateMazeBlock(mazeButtons[i][j],i,j);
+                    if(setType == 0)
+                    {
+                        UpdateMazeBlock(mazeButtons[i][j],i,j);
+                    }
+                    else if(setType == 1)
+                    {
+                        this.startPoint = new int[] {i,j};
+                        setType = 0;
+                    }
+                    else if(setType == 2)
+                    {
+                        this.endPoint = new int[] {i,j};
+                        setType = 0;
+                    }
                 }
             }
         }
@@ -321,6 +347,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         saveAsButton = createButton("Save As");
         returnButton = createButton("Return");
         solveButton = createButton("Solve");
+        setStartButton = createButton("Set Start");
+        setEndButton = createButton("Set End");
 
         // Setup border layout
         mainPanel = new JPanel(); // TODO maybe add scroll pane??
@@ -343,6 +371,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             .addComponent(eraseIcon)
                             .addComponent(addLogoButton)
                             .addComponent(solveButton)
+                            .addComponent(setStartButton)
+                            .addComponent(setEndButton)
                             .addComponent(separatorTop)
                             .addComponent(saveButton)
                             .addComponent(saveAsButton)
@@ -357,6 +387,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             .addComponent(selectIcon))
                     .addComponent(addLogoButton)
                     .addComponent(solveButton)
+                    .addComponent(setStartButton)
+                    .addComponent(setEndButton)
                     .addComponent(separatorTop)
                     .addComponent(saveButton)
                     .addComponent(saveAsButton)
