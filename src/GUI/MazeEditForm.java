@@ -189,8 +189,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
 
     public void UpdateMazeBlock(JButton Button,int i, int j)
     {
-
-
         if (maze.maze[i][j] == 0)
         {
             maze.maze[i][j] = 2;
@@ -201,9 +199,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             maze.maze[i][j] = 0;
             Button.setIcon(blackSquare);
         }
-
-
-
     }
     /**
      * Iterates through the maze and creates green path for maze cells that have been marked as
@@ -212,8 +207,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void UpdateMazeDisplay(int[][] solvedMazeDisplay)
     {
-        //ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
-        //ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
         for (int i = 0; i < this.mazeWidth; i++)
         {
             for (int j = 0; j < this.mazeHeight; j++)
@@ -249,9 +242,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void generateMaze()
     {
-        // Set up the icons
-        //ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
-        //ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
 
         int[][] startingMaze = new int[this.mazeWidth][this.mazeHeight];
 
@@ -262,29 +252,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 startingMaze[i][j] = 0;
             }
         }
-        /*
-        for (int i = 30; i < 60; i++)
-        {
-            for (int j = 30; j < 60; j++)
-            {
-                startingMaze[i][j] = -1;
-            }
-        }
-        for (int i = 10; i < 20; i++)
-        {
-            for (int j = 10; j < 20; j++)
-            {
-                startingMaze[i][j] = -1;
-            }
-        }
-        for (int i = 70; i < 100; i++)
-        {
-            for (int j = 70; j < 90; j++)
-            {
-                startingMaze[i][j] = -1;
-            }
-        }
-        */
+
         maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
         System.out.println(maze.maze[2][2]);
         //int cubeSize = 8;
