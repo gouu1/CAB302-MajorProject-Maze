@@ -87,6 +87,7 @@ public class Maze {
     public int[][] solveMaze(int[] startPoint, int[] endPoint) {
         int[][] solvedMaze = new int[this.x][this.y];
         int[][] solvedMazeDisplay = new int[this.x][this.y];
+        int Max_Iterations = this.x*this.y;
 
         for (int i = 0; i < x; i++)
         {
@@ -98,7 +99,7 @@ public class Maze {
 
         solvedMaze[startPoint[0]][startPoint[1]] = 1;
 
-        while(solvedMaze[endPoint[0]][endPoint[1]] == -2)
+        while(solvedMaze[endPoint[0]][endPoint[1]] == -2 && Max_Iterations > 0)
         {
             for (int i = 0; i < x; i++)
             {
@@ -141,49 +142,47 @@ public class Maze {
                     }
                 }
             }
+            Max_Iterations = Max_Iterations -1;
         }
 
-        System.out.println(solvedMaze[endPoint[0]][endPoint[1]]);
+        if (Max_Iterations > 0) {
+            System.out.println(solvedMaze[endPoint[0]][endPoint[1]]);
 
-        int[] nextPoint = {endPoint[0], endPoint[1]};
-        int choice = 0;
-        for (int i = 0; i < solvedMaze[endPoint[0]][endPoint[1]]; i++)
+            int[] nextPoint = {endPoint[0], endPoint[1]};
+            int choice = 0;
+            for (int i = 0; i < solvedMaze[endPoint[0]][endPoint[1]]; i++) {
+                choice = 0;
+                solvedMazeDisplay[nextPoint[0]][nextPoint[1]] = 1;
+                if (nextPoint[0] > 0 && choice == 0) {
+                    if (solvedMaze[nextPoint[0] - 1][nextPoint[1]] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0] - 1][nextPoint[1]] > 0) {
+                        nextPoint[0] = nextPoint[0] - 1;
+                        choice = 1;
+                    }
+                }
+                if (nextPoint[0] < x - 1 && choice == 0) {
+                    if (solvedMaze[nextPoint[0] + 1][nextPoint[1]] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0] + 1][nextPoint[1]] > 0) {
+                        nextPoint[0] = nextPoint[0] + 1;
+                        choice = 1;
+                    }
+                }
+                if (nextPoint[1] > 0 && choice == 0) {
+                    if (solvedMaze[nextPoint[0]][nextPoint[1] - 1] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]][nextPoint[1] - 1] > 0) {
+                        nextPoint[1] = nextPoint[1] - 1;
+                        choice = 1;
+                    }
+                }
+                if (nextPoint[1] < y - 1 && choice == 0) {
+                    if (solvedMaze[nextPoint[0]][nextPoint[1] + 1] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]][nextPoint[1] + 1] > 0) {
+                        nextPoint[1] = nextPoint[1] + 1;
+                    }
+                }
+            }
+            return solvedMazeDisplay;
+        }
+        else
         {
-            choice = 0;
-            solvedMazeDisplay[nextPoint[0]][nextPoint[1]] = 1;
-            if (nextPoint[0] > 0 && choice == 0)
-            {
-                if (solvedMaze[nextPoint[0]-1][nextPoint[1]] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]-1][nextPoint[1]] > 0)
-                {
-                    nextPoint[0] = nextPoint[0]-1;
-                    choice = 1;
-                }
-            }
-            if (nextPoint[0] < x-1 && choice == 0)
-            {
-                if (solvedMaze[nextPoint[0]+1][nextPoint[1]] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]+1][nextPoint[1]] > 0)
-                {
-                    nextPoint[0] = nextPoint[0]+1;
-                    choice = 1;
-                }
-            }
-            if (nextPoint[1] > 0 && choice == 0)
-            {
-                if (solvedMaze[nextPoint[0]][nextPoint[1]-1] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]][nextPoint[1]-1] > 0)
-                {
-                    nextPoint[1] = nextPoint[1]-1;
-                    choice = 1;
-                }
-            }
-            if (nextPoint[1] < y-1 && choice == 0)
-            {
-                if (solvedMaze[nextPoint[0]][nextPoint[1]+1] < solvedMaze[nextPoint[0]][nextPoint[1]] && solvedMaze[nextPoint[0]][nextPoint[1]+1] > 0)
-                {
-                    nextPoint[1] = nextPoint[1]+1;
-                }
-            }
+            return null;
         }
-        return solvedMazeDisplay;
     }
 
     /**
