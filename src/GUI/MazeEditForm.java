@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.time.LocalDateTime;
 
 import static GUI.DashForm.source;
 
@@ -21,12 +22,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private JLabel eraseIcon;
     private JLabel selectIcon;
     private final String titleString;
-    private final String mazeName;
     private JPanel mainPanel;
     private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton;
     private JFileChooser fileChooser;
     private Maze maze;
-    private JButton[][] mazeButtons;// = new JButton[this.mazeWidth][this.mazeHeight];
+    private JButton[][] mazeButtons;
     private int mazeWidth = 0;
     private int mazeHeight = 0;
     private int showSolution = 0;
@@ -40,7 +40,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
 
     public MazeEditForm(String mazeName, Dimension mazeSize) {
-        this.mazeName = mazeName;
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
         titleString = getTitleString(mazeName);
@@ -75,7 +74,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         return "Maze Editor - " + mazeName + " (" + mazeWidth + ", " + mazeHeight + ")";
     }
 
-
     /**
      * Runs the main driver of the form, which is the createGUI() function
      */
@@ -97,14 +95,18 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
 
         if (src == saveButton) {
+            maze.setTimeEdited(LocalDateTime.now());
             source.addMaze(maze);
+            JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (src == saveAsButton) {
             String newTitle = JOptionPane.showInputDialog("Please enter a new title");
             maze.setTitle(newTitle);
+            maze.setTimeEdited(LocalDateTime.now());
             source.addMaze(maze);
 
+            JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
             setTitle(getTitleString(newTitle));
         }
 
@@ -314,7 +316,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         setEndButton = createButton("Set End");
 
         // Setup border layout
-        mainPanel = new JPanel(); // TODO maybe add scroll pane??
+        mainPanel = new JPanel();
         mainPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         JPanel toolsPanel = new JPanel();
         getContentPane().add(mainPanel, BorderLayout.CENTER);

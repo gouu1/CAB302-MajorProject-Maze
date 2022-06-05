@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import static GUI.DashForm.source;
 
 /**
  * A dialog form that will query basic information about a maze before it is created in the maze editor
