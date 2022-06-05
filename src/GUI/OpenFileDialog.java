@@ -75,7 +75,7 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getContentPane());
 
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // only one item to be selected at a time
+        if (mode == Mode.OPEN) table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // only one item to be selected at a time
         table.setAutoCreateRowSorter(true);
 
         JScrollPane scrollPane = new JScrollPane(table);

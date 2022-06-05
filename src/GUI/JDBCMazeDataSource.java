@@ -7,7 +7,7 @@ import java.util.Base64;
 import java.util.Set;
 
 public class JDBCMazeDataSource {
-    private Connection connection;
+    private final Connection connection;
     private PreparedStatement addMaze;
     private PreparedStatement getMaze;
     private PreparedStatement getAll;

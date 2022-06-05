@@ -32,12 +32,16 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
 
 
     public MazeEditForm(String mazeName, Dimension mazeSize) {
-        titleString = "Maze Editor - " + mazeName + " (" + mazeSize.width + ", " + mazeSize.height + ")";
         this.mazeName = mazeName;
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
+        titleString = getTitleString(mazeName);
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
         maze = new Maze(mazeName, "dummy author"); //TODO make authorship work
+    }
+
+    private String getTitleString(String mazeName) {
+        return "Maze Editor - " + mazeName + " (" + mazeWidth + ", " + mazeHeight + ")";
     }
 
     /**
@@ -65,7 +69,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
 
         if (src == saveAsButton) {
-            // TODO - change name and save as new name
+            String newTitle = JOptionPane.showInputDialog("Please enter a new title");
+            maze.setTitle(newTitle);
+            source.addMaze(maze);
+
+            setTitle(getTitleString(newTitle));
         }
 
         if (src == addLogoButton) {
