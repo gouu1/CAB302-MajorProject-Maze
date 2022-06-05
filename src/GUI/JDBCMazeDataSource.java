@@ -4,7 +4,6 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Set;
 
 public class JDBCMazeDataSource {
     private final Connection connection;

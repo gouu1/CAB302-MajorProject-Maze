@@ -16,7 +16,7 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
     public static final int WIDTH = 700;
     public static final int HEIGHT = 300;
     private final Mode mode;
-    private JButton getRowButton, closeButton, exportButton;
+    private JButton getRowButton, closeButton, deleteButton, exportButton;
     private final JTable table;
     private final String[] columnNames = {
                                     "Title",
@@ -40,7 +40,13 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         for (String[] sa : temp) {
             data[i++] = sa;
         }
-        table = new JTable(data, columnNames);
+        table = new JTable(data, columnNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 0;
+            };
+        };
     }
 
     @Override
@@ -82,6 +88,7 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         JPanel southPanel = new JPanel(new BorderLayout());
 
         closeButton = createButton("Close");
+        deleteButton = createButton("Delete");
 
         Border border = BorderFactory.createLoweredSoftBevelBorder();
 
@@ -90,6 +97,7 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         southPanel.setBorder(border);
         southPanel.add(closeButton, BorderLayout.EAST);
         southPanel.add(getSelection(), BorderLayout.WEST);
+//        southPanel.add(deleteButton, BorderLayout.WEST); // TODO add delete
 
         repaint();
         setVisible(true);
