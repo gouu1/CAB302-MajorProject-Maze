@@ -98,8 +98,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             maze.setTimeEdited(LocalDateTime.now());
             Maze checkMaze = source.getMaze(maze.getTitle());
 
+            if (checkMaze.getTitle().equals("na")) // na means the maze does not exist
+                source.addMaze(maze);
+            else
+                source.updateMaze(maze);
 
-            source.addMaze(maze);
             JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
         }
 
