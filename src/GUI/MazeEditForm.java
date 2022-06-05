@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import static GUI.DashForm.source;
 
 /**
  * Form that allows users to edit and save mazes
@@ -24,8 +25,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private JPanel mainPanel;
     private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton;
     private JFileChooser fileChooser;
-    private Maze maze = new Maze();
-    private JButton[][] mazeButtons;
+    private Maze maze;
+    private JButton[][] mazeButtons;// = new JButton[this.mazeWidth][this.mazeHeight];
     private int mazeWidth = 0;
     private int mazeHeight = 0;
     private int showSolution = 0;
@@ -39,44 +40,41 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
 
     public MazeEditForm(String mazeName, Dimension mazeSize) {
-        titleString = "Maze Editor - " + mazeName + " (" + mazeSize.width + ", " + mazeSize.height + ")";
         this.mazeName = mazeName;
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
+        titleString = getTitleString(mazeName);
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
+        maze = new Maze(mazeName, "dummy author"); //TODO make authorship work
 
-        if (mazeSize.width <= 10 && mazeSize.height <= 10)
-        {
+        if (mazeSize.width <= 10 && mazeSize.height <= 10) {
             this.cubeSize = 64;
-        }
-        else if(mazeSize.width <= 20 && mazeSize.height <= 20)
-        {
+        } else if (mazeSize.width <= 20 && mazeSize.height <= 20) {
             this.cubeSize = 32;
-        }
-        else if(mazeSize.width <= 40 && mazeSize.height <= 40)
-        {
+        } else if (mazeSize.width <= 40 && mazeSize.height <= 40) {
             this.cubeSize = 16;
-        }
-        else if(mazeSize.width <= 80 && mazeSize.height <= 80)
-        {
+        } else if (mazeSize.width <= 80 && mazeSize.height <= 80) {
             this.cubeSize = 8;
-        }
-        else if(mazeSize.width <= 100 && mazeSize.height <= 100)
-        {
+        } else if (mazeSize.width <= 100 && mazeSize.height <= 100) {
             this.cubeSize = 6;
         }
         Image image = blackSquare.getImage();
-        Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize,  java.awt.Image.SCALE_SMOOTH);
+        Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
         blackSquare = new ImageIcon(newimg);
 
         image = greenSquare.getImage();
-        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize,  java.awt.Image.SCALE_SMOOTH);
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
         greenSquare = new ImageIcon(newimg);
 
         image = whiteSquare.getImage();
-        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize,  java.awt.Image.SCALE_SMOOTH);
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
         whiteSquare = new ImageIcon(newimg);
     }
+
+    private String getTitleString(String mazeName) {
+        return "Maze Editor - " + mazeName + " (" + mazeWidth + ", " + mazeHeight + ")";
+    }
+
 
     /**
      * Runs the main driver of the form, which is the createGUI() function
@@ -99,18 +97,15 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
 
         if (src == saveButton) {
-            // TODO make this overwrite the save on the current file
-            System.out.println("Saving: " + mazeName + ".someFileEnding");
+            source.addMaze(maze);
         }
 
         if (src == saveAsButton) {
-            int returnValue = fileChooser.showSaveDialog(getContentPane()); // TODO make this try and save a new copy and auto name it
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                System.out.println("Saving:" + file.getName()); // TODO make this actually save a file
-            } else {
-                System.out.println("Open command cancelled by user.");
-            }
+            String newTitle = JOptionPane.showInputDialog("Please enter a new title");
+            maze.setTitle(newTitle);
+            source.addMaze(maze);
+
+            setTitle(getTitleString(newTitle));
         }
 
         if (src == addLogoButton) {

@@ -1,32 +1,121 @@
 package GUI;
 
-import java.io.File;
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import static GUI.DashForm.source;
 
 /**
  * Helper for opening image files
  */
-public class OpenFileDialog {
+public class OpenFileDialog extends JDialog implements ActionListener, Runnable {
+    public static final int WIDTH = 700;
+    public static final int HEIGHT = 300;
+    private final Mode mode;
+    private JButton getRowButton, closeButton, deleteButton, exportButton;
+    private final JTable table;
+    private final String[] columnNames = {
+                                    "Title",
+                                    "Author",
+                                    "Date Created",
+                                    "Date Last Modified"};
+    private Object[][] data;
 
     /**
      * Creates the dialog and assigns its parent content pane
      */
-    public OpenFileDialog() {
+    public OpenFileDialog(JFrame parent, String title, boolean modality, Mode mode) {
+        super(parent, title, modality);
+        this.mode = mode;
+        ArrayList<String[]> temp = source.getMazeList();
+
+        data = new Object[temp.size()][columnNames.length];
+
+        // Populates the data variable
+        int i = 0;
+        for (String[] sa : temp) {
+            data[i++] = sa;
+        }
+        table = new JTable(data, columnNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 0;
+            };
+        };
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object src = e.getSource();
+
+        if (src == closeButton) {
+            dispose();
+        }
+
+        if (src == getRowButton) {
+            Maze maze = source.getMaze("title");
+            source.addMaze(maze);
+            System.out.println(maze.getTitle() + maze.getAuthor());
+        }
+
+        if (src == exportButton) {
+            System.out.println("todo");
+        }
 
     }
 
-    /**
-     * Checks if the file is a valid image file.
-     * @return - true if the file is an image file, false otherwise.
-     */
-    private boolean isImageFile() {
-        return false;
+    @Override
+    public void run() {
+        createGUI();
     }
 
-    /**
-     * Gets the user selected file
-     * @return - The file opened by the user.
-     */
-    public File getFile() {
-        return null;
+    public void createGUI() {
+        BorderLayout layout = new BorderLayout();
+        setLayout(layout);
+        setSize(WIDTH, HEIGHT);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(getContentPane());
+
+        if (mode == Mode.OPEN) table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // only one item to be selected at a time
+        table.setAutoCreateRowSorter(true);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        JPanel southPanel = new JPanel(new BorderLayout());
+
+        closeButton = createButton("Close");
+        deleteButton = createButton("Delete");
+
+        Border border = BorderFactory.createLoweredSoftBevelBorder();
+
+        add(scrollPane, BorderLayout.CENTER);
+        add(southPanel, BorderLayout.SOUTH);
+        southPanel.setBorder(border);
+        southPanel.add(closeButton, BorderLayout.EAST);
+        southPanel.add(getSelection(), BorderLayout.WEST);
+//        southPanel.add(deleteButton, BorderLayout.WEST); // TODO add delete
+
+        repaint();
+        setVisible(true);
+    }
+
+    private JButton createButton(String text) {
+        JButton myButton = new JButton(text);
+        Dimension buttonDim = new Dimension(100, 30);
+        myButton.setPreferredSize(buttonDim);
+        myButton.addActionListener(this);
+        return myButton;
+    }
+
+    private JButton getSelection() {
+        return switch (mode) {
+            case OPEN -> getRowButton = createButton("Open maze");
+            case EXPORT -> exportButton = createButton("Export mazes");
+            default -> null;
+        };
     }
 }
