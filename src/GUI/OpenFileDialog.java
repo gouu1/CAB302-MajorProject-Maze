@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,12 +19,13 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
     private final Mode mode;
     private JButton getRowButton, closeButton, deleteButton, exportButton;
     private final JTable table;
-    private final String[] columnNames = {
-                                    "Title",
-                                    "Author",
-                                    "Date Created",
-                                    "Date Last Modified"};
-    private Object[][] data;
+    private final DefaultTableModel model;
+    private static final String[] COLUMN_NAMES = {
+            "Title",
+            "Author",
+            "Date Last Modified",
+            "Date Created"
+    };
 
     /**
      * Creates the dialog and assigns its parent content pane
@@ -31,22 +33,26 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
     public OpenFileDialog(JFrame parent, String title, boolean modality, Mode mode) {
         super(parent, title, modality);
         this.mode = mode;
-        ArrayList<String[]> temp = source.getMazeList();
 
-        data = new Object[temp.size()][columnNames.length];
+        model = new DefaultTableModel(initData(), COLUMN_NAMES);
+        table = new JTable(model) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 0;
+            };
+        };
+    }
+
+    private Object[][] initData() {
+        ArrayList<String[]> temp = source.getMazeList(); // gets the data from the database
+        Object[][] data = new Object[temp.size()][COLUMN_NAMES.length];
 
         // Populates the data variable
         int i = 0;
         for (String[] sa : temp) {
             data[i++] = sa;
         }
-        table = new JTable(data, columnNames) {
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 0;
-            };
-        };
+        return data;
     }
 
     @Override
@@ -67,6 +73,15 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
             System.out.println("todo");
         }
 
+        if (src == deleteButton) {
+            int[] rows = table.getSelectedRows();
+
+            for (int i = 0; i < rows.length; i++) {
+                source.deleteMaze((String) table.getValueAt(rows[i] - i, 0));
+                model.removeRow(rows[i] - i);
+            }
+        }
+
     }
 
     @Override
@@ -85,19 +100,19 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         table.setAutoCreateRowSorter(true);
 
         JScrollPane scrollPane = new JScrollPane(table);
-        JPanel southPanel = new JPanel(new BorderLayout());
+        JPanel southPanel = new JPanel(new FlowLayout());
 
         closeButton = createButton("Close");
-        deleteButton = createButton("Delete");
+        deleteButton = createButton("Delete Maze");
 
         Border border = BorderFactory.createLoweredSoftBevelBorder();
 
         add(scrollPane, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
         southPanel.setBorder(border);
-        southPanel.add(closeButton, BorderLayout.EAST);
-        southPanel.add(getSelection(), BorderLayout.WEST);
-//        southPanel.add(deleteButton, BorderLayout.WEST); // TODO add delete
+        southPanel.add(deleteButton);
+        southPanel.add(closeButton);
+        southPanel.add(getSelection());
 
         repaint();
         setVisible(true);
