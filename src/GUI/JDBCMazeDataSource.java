@@ -12,6 +12,7 @@ public class JDBCMazeDataSource {
     private PreparedStatement getAll;
     private PreparedStatement deleteMaze;
     private PreparedStatement countRows;
+    private PreparedStatement updateMaze;
 
     public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS " +
@@ -27,6 +28,7 @@ public class JDBCMazeDataSource {
     private static final String GET_ALL = "SELECT title, author, dateLastModified, dateCreated FROM mazes";
     private static final String DELETE_MAZE = "DELETE FROM mazes WHERE title=?";
     private static final String COUNT_ROWS = "SELECT COUNT(*) FROM mazes";
+    private static final String UPDATE_MAZE = "UPDATE mazes SET mazeData=?, dateLastModified=? WHERE title=?";
 
     public JDBCMazeDataSource() {
         connection = DBConnection.getInstance();
@@ -38,8 +40,20 @@ public class JDBCMazeDataSource {
             getAll = connection.prepareStatement(GET_ALL);
             deleteMaze = connection.prepareStatement(DELETE_MAZE);
             countRows = connection.prepareStatement(COUNT_ROWS);
+            updateMaze = connection.prepareStatement(UPDATE_MAZE);
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void updateMaze(Maze m) {
+        try {
+            updateMaze.setString(1, stringify(m.getMaze()));
+            updateMaze.setString(2, m.getTimeEdited());
+            updateMaze.setString(3, m.getTitle());
+            updateMaze.execute();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -50,7 +64,7 @@ public class JDBCMazeDataSource {
             addMaze.setString(3, m.getAuthor());
             addMaze.setString(4, m.getTimeEdited());
             addMaze.setString(5, m.getTimeCreated());
-            addMaze.execute();
+            addMaze.executeUpdate();
         } catch (SQLException | IOException ex) {
             ex.printStackTrace();
         }
@@ -62,12 +76,13 @@ public class JDBCMazeDataSource {
         try {
             getMaze.setString(1, title);
             rs = getMaze.executeQuery();
-            rs.next();
-            maze.setMaze((int[][]) deStringify(rs.getString("mazeData")));
-            maze.setTitle(rs.getString("title"));
-            maze.setAuthor(rs.getString("author"));
-            maze.setTimeCreated(rs.getString("dateCreated"));
-            maze.setTimeEdited(rs.getString("dateLastModified"));
+            if (rs.next()) {
+                maze.setMaze((int[][]) deStringify(rs.getString("mazeData")));
+                maze.setTitle(rs.getString("title"));
+                maze.setAuthor(rs.getString("author"));
+                maze.setTimeCreated(rs.getString("dateCreated"));
+                maze.setTimeEdited(rs.getString("dateLastModified"));
+            } else maze.setTitle("na");
         } catch (SQLException | IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }

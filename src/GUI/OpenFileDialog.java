@@ -36,9 +36,11 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
 
         model = new DefaultTableModel(initData(), COLUMN_NAMES);
         table = new JTable(model) {
+
+            // Prevents cells from being editable
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 0;
+                return false;
             };
         };
     }
@@ -81,7 +83,6 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
                 model.removeRow(rows[i] - i);
             }
         }
-
     }
 
     @Override

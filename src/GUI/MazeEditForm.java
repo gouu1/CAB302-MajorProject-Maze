@@ -96,6 +96,9 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
 
         if (src == saveButton) {
             maze.setTimeEdited(LocalDateTime.now());
+            Maze checkMaze = source.getMaze(maze.getTitle());
+
+
             source.addMaze(maze);
             JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
         }
