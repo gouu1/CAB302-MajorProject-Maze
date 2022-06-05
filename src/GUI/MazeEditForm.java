@@ -3,16 +3,18 @@ package GUI;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
 
 /**
  * Form that allows users to edit and save mazes
  */
 public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
+    public static final int HEIGHT = 700;
     private static final int FONT_SIZE = 16;
     private JLabel drawIcon; // TODO make these labels clickable
     private JLabel eraseIcon;
@@ -27,7 +29,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private int mazeWidth = 0;
     private int mazeHeight = 0;
     private int showSolution = 0;
+    private int cubeSize;
 
+    private ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
+    private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
+    private ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
 
     public MazeEditForm(String mazeName, Dimension mazeSize) {
         titleString = "Maze Editor - " + mazeName + " (" + mazeSize.width + ", " + mazeSize.height + ")";
@@ -35,6 +41,38 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
+
+        if (mazeSize.width <= 10 && mazeSize.height <= 10)
+        {
+            this.cubeSize = 64;
+        }
+        else if(mazeSize.width <= 20 && mazeSize.height <= 20)
+        {
+            this.cubeSize = 32;
+        }
+        else if(mazeSize.width <= 40 && mazeSize.height <= 40)
+        {
+            this.cubeSize = 16;
+        }
+        else if(mazeSize.width <= 80 && mazeSize.height <= 80)
+        {
+            this.cubeSize = 8;
+        }
+        else if(mazeSize.width <= 100 && mazeSize.height <= 100)
+        {
+            this.cubeSize = 6;
+        }
+        Image image = blackSquare.getImage();
+        Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize,  java.awt.Image.SCALE_SMOOTH);
+        blackSquare = new ImageIcon(newimg);
+
+        image = greenSquare.getImage();
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize,  java.awt.Image.SCALE_SMOOTH);
+        greenSquare = new ImageIcon(newimg);
+
+        image = whiteSquare.getImage();
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize,  java.awt.Image.SCALE_SMOOTH);
+        whiteSquare = new ImageIcon(newimg);
     }
 
     /**
@@ -125,9 +163,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
 
     public void UpdateMazeBlock(JButton Button,int i, int j)
     {
-        ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
-        ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
-        ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
+
 
         if (maze.maze[i][j] == 0)
         {
@@ -150,8 +186,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void UpdateMazeDisplay(int[][] solvedMazeDisplay)
     {
-        ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
-        ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
+        //ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
+        //ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
         for (int i = 0; i < this.mazeWidth; i++)
         {
             for (int j = 0; j < this.mazeHeight; j++)
@@ -188,8 +224,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public void generateMaze()
     {
         // Set up the icons
-        ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
-        ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
+        //ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
+        //ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
 
         int[][] startingMaze = new int[this.mazeWidth][this.mazeHeight];
 
@@ -225,7 +261,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         */
         maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
         System.out.println(maze.maze[2][2]);
-        int cubeSize = 8;
+        //int cubeSize = 8;
         for (int i = 0; i < this.mazeWidth; i++)
         {
             for (int j = 0; j < this.mazeHeight; j++)
