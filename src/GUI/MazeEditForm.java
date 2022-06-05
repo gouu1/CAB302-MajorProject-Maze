@@ -18,6 +18,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 700;
     private static final int FONT_SIZE = 16;
+    private String author;
     private JLabel drawIcon; // TODO make these labels clickable
     private JLabel eraseIcon;
     private JLabel selectIcon;
@@ -44,7 +45,10 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         this.mazeWidth = mazeSize.width;
         titleString = getTitleString(mazeName);
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
-        maze = new Maze(mazeName, "dummy author"); //TODO make authorship work
+        while (author == null) {
+            author = JOptionPane.showInputDialog(this, "Please add the author of this maze");
+        }
+        maze = new Maze(mazeName, author); //TODO make authorship work
 
         if (mazeSize.width <= 10 && mazeSize.height <= 10) {
             this.cubeSize = 64;
@@ -95,25 +99,18 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
 
         if (src == saveButton) {
-            maze.setTimeEdited(LocalDateTime.now());
-            Maze checkMaze = source.getMaze(maze.getTitle());
-
-            if (checkMaze.getTitle().equals("na")) // na means the maze does not exist
-                source.addMaze(maze);
-            else
-                source.updateMaze(maze);
-
-            JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
+            saveMaze();
         }
 
         if (src == saveAsButton) {
             String newTitle = JOptionPane.showInputDialog("Please enter a new title");
-            maze.setTitle(newTitle);
-            maze.setTimeEdited(LocalDateTime.now());
-            source.addMaze(maze);
-
-            JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
-            setTitle(getTitleString(newTitle));
+            if (newTitle == null) {
+                JOptionPane.showMessageDialog(this, "Save aborted!", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                maze.setTitle(newTitle);
+                setTitle(getTitleString(newTitle));
+                saveMaze();
+            }
         }
 
         if (src == addLogoButton) {
@@ -125,11 +122,13 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 System.out.println("Open command cancelled by user.");
             }
         }
+
         if (src == setStartButton)
         {
             setType = 1;
             System.out.println("Set Start");
         }
+
         if (src == setEndButton)
         {
             setType = 2;
@@ -186,6 +185,23 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                         setType = 0;
                     }
                 }
+            }
+        }
+    }
+
+    private void saveMaze() {
+        maze.setTimeEdited(LocalDateTime.now());
+        Maze checkMaze = source.getMaze(maze.getTitle());
+        if (checkMaze.getTitle().equals("na")) { // "na" means the maze does not exist
+            source.addMaze(maze);
+            JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else { // maze already exists
+            if (checkMaze.getAuthor().equals(maze.getAuthor())) {
+                source.updateMaze(maze);
+                JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Cannot overwrite someone else's maze!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
