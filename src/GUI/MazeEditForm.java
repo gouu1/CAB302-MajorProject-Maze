@@ -47,8 +47,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
         while (author == null) {
             author = JOptionPane.showInputDialog(this, "Please add the author of this maze");
+            if (author == null) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid author!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        maze = new Maze(mazeName, author); //TODO make authorship work
+        maze = new Maze(mazeName, author);
 
         if (mazeSize.width <= 10 && mazeSize.height <= 10) {
             this.cubeSize = 64;

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import static GUI.DashForm.source;
 
 /**
  * A dialog form that will query basic information about a maze before it is created in the maze editor
@@ -38,6 +39,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         }
 
         if (src == newMazeButton) {
+            // Check the entries are valid
             if (mazeNameField.getText().isBlank() ||
                     mazeX.getText().isBlank() || mazeY.getText().isBlank() ||
                     checker(mazeX.getText()) || checker(mazeY.getText())) {
@@ -45,6 +47,22 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid maze name and/or dimensions!", "Error!",
                         JOptionPane.ERROR_MESSAGE);
+
+            // Check that the entries are within appropriate bounds
+            } else if ((Integer.parseInt(mazeX.getText()) < 10 || Integer.parseInt(mazeY.getText()) < 10 ||
+                    Integer.parseInt(mazeX.getText()) > 100 || Integer.parseInt(mazeY.getText()) > 100)) {
+
+                JOptionPane.showMessageDialog(this,
+                        "Maze size invalid, ensure dimensions are between " +
+                        "(100x100) and (10x10)",
+                        "Error!", JOptionPane.ERROR_MESSAGE);
+
+            // Check that the maze title doesn't already exist
+            } else if (!source.getMaze(mazeNameField.getText()).getTitle().equals("na")) {
+                JOptionPane.showMessageDialog(this, "That title is taken, please use another",
+                        "Error!", JOptionPane.ERROR_MESSAGE);
+
+             // Success!
             } else {
                 SwingUtilities.invokeLater(new MazeEditForm(mazeNameField.getText(),
                         new Dimension(Integer.parseInt(mazeX.getText()), Integer.parseInt(mazeY.getText())))); // yuck
