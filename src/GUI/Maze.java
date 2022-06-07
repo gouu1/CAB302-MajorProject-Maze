@@ -14,6 +14,7 @@ import java.util.Arrays;
 public class Maze {
     private int x;
     private int y;
+    private boolean Blank;
     private String timeCreated;
     private String timeEdited;
     private String title, author;
@@ -87,12 +88,16 @@ public class Maze {
      * @param x The x dimension of the maze
      * @param y The y dimension of the maze
      */
-    public void MazeGenerator(int[][] startMaze, int x, int y) {
+    public void MazeGenerator(int[][] startMaze, int x, int y, boolean blank) {
         this.x = x;
         this.y = y;
+        this.Blank = blank;
         maze = new int[this.x][this.y];
         startUp(startMaze);
-        generateMaze(0, 0);
+        if (blank)
+        {
+            generateMaze(0, 0);
+        }
     }
 
     /**
@@ -105,20 +110,20 @@ public class Maze {
         {
             for (int j = 0; j < x; j++)
             {
-                if (startMaze[j][i] != -1)
-                {
-                    if (i % 2 == 0 && j% 2 == 0)
-                    {
-                        maze[j][i] = 1;
-                    }
-                    else
-                    {
+                if (Blank) {
+                    if (startMaze[j][i] != -1) {
+                        if (i % 2 == 0 && j % 2 == 0) {
+                            maze[j][i] = 1;
+                        } else {
+                            maze[j][i] = 0;
+                        }
+                    } else {
                         maze[j][i] = 0;
                     }
                 }
                 else
                 {
-                    maze[j][i] = 0;
+                    maze[j][i] = 2;
                 }
             }
         }

@@ -36,6 +36,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private int[] startPoint = null;
     private int[] endPoint = null;
     private int setType = 0;
+    private boolean randomCheck;
+    private boolean childrensCheck;
 
     private ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
     private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
@@ -54,9 +56,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      * @param mazeName - name of the new maze
      * @param mazeSize - dimensions of the new maze
      */
-    public MazeEditForm(String mazeName, Dimension mazeSize) {
+    public MazeEditForm(String mazeName, Dimension mazeSize,boolean randomcheck, boolean childrenscheck) {
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
+        this.randomCheck = randomcheck;
+        this.childrensCheck = childrenscheck;
         titleString = getTitleString(mazeName);
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
         while (author == null || author.isBlank()) {
@@ -294,7 +298,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             }
         }
 
-        maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
+        maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight,this.randomCheck);
         System.out.println(maze.maze[2][2]);
         //int cubeSize = 8;
         for (int i = 0; i < this.mazeWidth; i++)

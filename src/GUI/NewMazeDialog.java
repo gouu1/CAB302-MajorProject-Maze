@@ -64,8 +64,9 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
 
              // Success!
             } else {
+
                 SwingUtilities.invokeLater(new MazeEditForm(mazeNameField.getText(),
-                        new Dimension(Integer.parseInt(mazeX.getText()), Integer.parseInt(mazeY.getText())))); // yuck
+                        new Dimension(Integer.parseInt(mazeX.getText()), Integer.parseInt(mazeY.getText())),randomCheck.isSelected(),childrenCheck.isSelected())); // yuck
                 dispose();
             }
         }
