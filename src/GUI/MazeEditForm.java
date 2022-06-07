@@ -28,15 +28,16 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private Maze maze;
     private Maze preSaveMaze;
     private JButton[][] mazeButtons;
-    private int[][] startingMaze;
-    private int mazeWidth = 0;
-    private int mazeHeight = 0;
+    private final int[][] startingMaze;
+    private final int mazeWidth, mazeHeight;
     private int showSolution = 0;
     private int cubeSize;
     private int[] startPoint = null;
     private int[] endPoint = null;
     private int setType = 0;
-    private boolean randomCheck, childrensCheck, preExisting;
+    private boolean randomCheck;
+    private boolean childrensCheck;
+    private final boolean preExisting;
 
     private ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
     private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
@@ -57,33 +58,14 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         startingMaze = new int[this.mazeWidth][this.mazeHeight];
         for (int i = 0; i < this.mazeWidth; i++)
             for (int j = 0; j < this.mazeHeight; j++)
-                startingMaze[i][j] = 0;
+                startingMaze[i][j] = 2;
 
         maze = mazeToOpen;
+        maze.setX(mazeWidth);
+        maze.setY(mazeHeight);
         preSaveMaze = new Maze(maze.getTitle(), author); // save a copy of the maze to check if changes have been made
 
-        if (mazeWidth <= 10 && mazeHeight <= 10) {
-            this.cubeSize = 64;
-        } else if (mazeWidth <= 20 && mazeHeight <= 20) {
-            this.cubeSize = 32;
-        } else if (mazeWidth <= 40 && mazeHeight <= 40) {
-            this.cubeSize = 16;
-        } else if (mazeWidth <= 80 && mazeHeight <= 80) {
-            this.cubeSize = 8;
-        } else if (mazeWidth <= 100 && mazeHeight <= 100) {
-            this.cubeSize = 6;
-        }
-        Image image = blackSquare.getImage();
-        Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
-        blackSquare = new ImageIcon(newimg);
-
-        image = greenSquare.getImage();
-        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
-        greenSquare = new ImageIcon(newimg);
-
-        image = whiteSquare.getImage();
-        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
-        whiteSquare = new ImageIcon(newimg);
+        setUpVisuals();
     }
 
     /**
@@ -107,24 +89,33 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             }
         }
 
+        // Blank maze
         startingMaze = new int[this.mazeWidth][this.mazeHeight];
         for (int i = 0; i < this.mazeWidth; i++)
             for (int j = 0; j < this.mazeHeight; j++)
-                startingMaze[i][j] = 0;
+                startingMaze[i][j] = 2;
 
         author = author.trim();
         maze = new Maze(mazeName, author);
+        maze.setMaze(startingMaze);
         preSaveMaze = new Maze(mazeName, author); // save a copy of the maze to check if changes have been made
 
-        if (mazeSize.width <= 10 && mazeSize.height <= 10) {
+        setUpVisuals();
+    }
+
+    /**
+     * Set-ups the maze scaling and gets the images for the buttons
+     */
+    private void setUpVisuals() {
+        if (mazeWidth <= 10 && mazeHeight <= 10) {
             this.cubeSize = 64;
-        } else if (mazeSize.width <= 20 && mazeSize.height <= 20) {
+        } else if (mazeWidth <= 20 && mazeHeight <= 20) {
             this.cubeSize = 32;
-        } else if (mazeSize.width <= 40 && mazeSize.height <= 40) {
+        } else if (mazeWidth <= 40 && mazeHeight <= 40) {
             this.cubeSize = 16;
-        } else if (mazeSize.width <= 80 && mazeSize.height <= 80) {
+        } else if (mazeWidth <= 80 && mazeHeight <= 80) {
             this.cubeSize = 8;
-        } else if (mazeSize.width <= 100 && mazeSize.height <= 100) {
+        } else if (mazeWidth <= 100 && mazeHeight <= 100) {
             this.cubeSize = 6;
         }
         Image image = blackSquare.getImage();
@@ -334,17 +325,12 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void generateMaze()
     {
-        if (preExisting) {
+        if (!preExisting) { // run the random generator if the maze is new
             maze.MazeGenerator(this.startingMaze, this.mazeWidth, this.mazeHeight, randomCheck);
         }
+        preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
 
-        if (randomCheck) {
-            preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
-        } else {
-            preSaveMaze.setMaze(startingMaze);
-        }
         System.out.println(maze.maze[2][2]);
-        //int cubeSize = 8;
         for (int i = 0; i < this.mazeWidth; i++)
         {
             for (int j = 0; j < this.mazeHeight; j++)
