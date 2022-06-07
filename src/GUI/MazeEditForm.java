@@ -300,7 +300,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void generateMaze()
     {
-        maze.MazeGenerator(this.startingMaze, this.mazeWidth, this.mazeHeight);
+        maze.MazeGenerator(this.startingMaze, this.mazeWidth, this.mazeHeight, randomCheck);
         preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
         System.out.println(maze.maze[2][2]);
         //int cubeSize = 8;
