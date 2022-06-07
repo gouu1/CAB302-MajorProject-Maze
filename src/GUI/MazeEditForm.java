@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static GUI.DashForm.source;
 
@@ -29,6 +30,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private Maze maze;
     private Maze preSaveMaze;
     private JButton[][] mazeButtons;
+    private int[][] startingMaze;
     private int mazeWidth = 0;
     private int mazeHeight = 0;
     private int showSolution = 0;
@@ -59,12 +61,19 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         this.mazeWidth = mazeSize.width;
         titleString = getTitleString(mazeName);
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
+
         while (author == null || author.isBlank()) {
             author = JOptionPane.showInputDialog(this, "Please add the author of this maze");
             if (author == null || author.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid author!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+
+        startingMaze = new int[this.mazeWidth][this.mazeHeight];
+        for (int i = 0; i < this.mazeWidth; i++)
+            for (int j = 0; j < this.mazeHeight; j++)
+                startingMaze[i][j] = 0;
+
         author = author.trim();
         maze = new Maze(mazeName, author);
         preSaveMaze = new Maze(mazeName, author); // save a copy of the maze to check if changes have been made
@@ -114,9 +123,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         Object src = e.getSource();
 
         if (src == returnButton) {
-            if (preSaveMaze != maze) { // TODO overwrite maze .equals() so this works
+            if (!Objects.deepEquals(maze.getMaze(), preSaveMaze.getMaze())) {
                 int selection = JOptionPane.showConfirmDialog(this, "Changes have been made, do you want to return without saving?");
                 if (selection == JOptionPane.YES_OPTION) dispose();
+            } else {
+                dispose();
             }
         }
 
@@ -284,17 +295,18 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public void generateMaze()
     {
 
-        int[][] startingMaze = new int[this.mazeWidth][this.mazeHeight];
+//        int[][] startingMaze = new int[this.mazeWidth][this.mazeHeight];
+//
+//        for (int i = 0; i < this.mazeWidth; i++)
+//        {
+//            for (int j = 0; j < this.mazeHeight; j++)
+//            {
+//                startingMaze[i][j] = 0;
+//            }
+//        }
 
-        for (int i = 0; i < this.mazeWidth; i++)
-        {
-            for (int j = 0; j < this.mazeHeight; j++)
-            {
-                startingMaze[i][j] = 0;
-            }
-        }
-
-        maze.MazeGenerator(startingMaze,this.mazeWidth,this.mazeHeight);
+        maze.MazeGenerator(this.startingMaze,this.mazeWidth,this.mazeHeight);
+        preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
         System.out.println(maze.maze[2][2]);
         //int cubeSize = 8;
         for (int i = 0; i < this.mazeWidth; i++)
@@ -433,5 +445,13 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             System.err.println("Couldn't find file: " + path);
             return null;
         }
+    }
+
+    private int[][] cloneMaze(int[][] original) {
+        int[][] clone = new int[original.length][];
+        for (int i = 0; i < original.length; i++) {
+            clone[i] = original[i].clone();
+        }
+        return clone;
     }
 }
