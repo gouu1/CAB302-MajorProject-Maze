@@ -20,9 +20,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public static final int HEIGHT = 700;
     private static final int FONT_SIZE = 16;
     private String author;
-    private JLabel drawIcon; // TODO make these labels clickable
-    private JLabel eraseIcon;
-    private JLabel selectIcon;
+    private JLabel drawIcon, eraseIcon, selectIcon;
     private final String titleString;
     private JPanel mainPanel;
     private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton;
@@ -38,8 +36,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private int[] startPoint = null;
     private int[] endPoint = null;
     private int setType = 0;
-    private boolean randomCheck;
-    private boolean childrensCheck;
+    private boolean randomCheck, childrensCheck, preExisting;
 
     private ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
     private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
@@ -50,7 +47,43 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      * @param mazeToOpen - maze from the database to open
      */
     public MazeEditForm(Maze mazeToOpen) { // TODO finish this
+        preExisting = true;
+        this.mazeHeight = mazeToOpen.getMaze().length;
+        this.mazeWidth = mazeToOpen.getMaze()[0].length;
         titleString = getTitleString(mazeToOpen.getTitle());
+        author = mazeToOpen.getAuthor();
+        mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
+
+        startingMaze = new int[this.mazeWidth][this.mazeHeight];
+        for (int i = 0; i < this.mazeWidth; i++)
+            for (int j = 0; j < this.mazeHeight; j++)
+                startingMaze[i][j] = 0;
+
+        maze = mazeToOpen;
+        preSaveMaze = new Maze(maze.getTitle(), author); // save a copy of the maze to check if changes have been made
+
+        if (mazeWidth <= 10 && mazeHeight <= 10) {
+            this.cubeSize = 64;
+        } else if (mazeWidth <= 20 && mazeHeight <= 20) {
+            this.cubeSize = 32;
+        } else if (mazeWidth <= 40 && mazeHeight <= 40) {
+            this.cubeSize = 16;
+        } else if (mazeWidth <= 80 && mazeHeight <= 80) {
+            this.cubeSize = 8;
+        } else if (mazeWidth <= 100 && mazeHeight <= 100) {
+            this.cubeSize = 6;
+        }
+        Image image = blackSquare.getImage();
+        Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+        blackSquare = new ImageIcon(newimg);
+
+        image = greenSquare.getImage();
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+        greenSquare = new ImageIcon(newimg);
+
+        image = whiteSquare.getImage();
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+        whiteSquare = new ImageIcon(newimg);
     }
 
     /**
@@ -63,6 +96,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         this.mazeWidth = mazeSize.width;
         this.randomCheck = randomcheck;
         this.childrensCheck = childrenscheck;
+        preExisting = false;
         titleString = getTitleString(mazeName);
         mazeButtons = new JButton[this.mazeWidth][this.mazeHeight];
 
@@ -300,8 +334,15 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void generateMaze()
     {
-        maze.MazeGenerator(this.startingMaze, this.mazeWidth, this.mazeHeight, randomCheck);
-        preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
+        if (preExisting) {
+            maze.MazeGenerator(this.startingMaze, this.mazeWidth, this.mazeHeight, randomCheck);
+        }
+
+        if (randomCheck) {
+            preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
+        } else {
+            preSaveMaze.setMaze(startingMaze);
+        }
         System.out.println(maze.maze[2][2]);
         //int cubeSize = 8;
         for (int i = 0; i < this.mazeWidth; i++)

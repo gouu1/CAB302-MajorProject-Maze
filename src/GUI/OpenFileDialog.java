@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static GUI.DashForm.source;
 
@@ -66,9 +67,10 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         }
 
         if (src == getRowButton) {
-            Maze maze = source.getMaze("title");
-            source.addMaze(maze);
-            System.out.println(maze.getTitle() + maze.getAuthor());
+            int row = table.getSelectedRow();
+            Maze maze = source.getMaze((String) table.getValueAt(row, 0));
+            SwingUtilities.invokeLater(new MazeEditForm(maze));
+            dispose();
         }
 
         if (src == exportButton) {
