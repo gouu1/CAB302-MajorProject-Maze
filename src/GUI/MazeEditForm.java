@@ -27,6 +27,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton;
     private JFileChooser fileChooser;
     private Maze maze;
+    private Maze preSaveMaze;
     private JButton[][] mazeButtons;
     private int mazeWidth = 0;
     private int mazeHeight = 0;
@@ -40,6 +41,19 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
     private ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
 
+    /**
+     * Constructor for use when opening a pre-existing maze from DB
+     * @param mazeToOpen - maze from the database to open
+     */
+    public MazeEditForm(Maze mazeToOpen) { // TODO finish this
+        titleString = getTitleString(mazeToOpen.getTitle());
+    }
+
+    /**
+     * Constructor for use when creating a brand-new maze
+     * @param mazeName - name of the new maze
+     * @param mazeSize - dimensions of the new maze
+     */
     public MazeEditForm(String mazeName, Dimension mazeSize) {
         this.mazeHeight = mazeSize.height;
         this.mazeWidth = mazeSize.width;
@@ -53,6 +67,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
         author = author.trim();
         maze = new Maze(mazeName, author);
+        preSaveMaze = new Maze(mazeName, author); // save a copy of the maze to check if changes have been made
 
         if (mazeSize.width <= 10 && mazeSize.height <= 10) {
             this.cubeSize = 64;
@@ -99,7 +114,10 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         Object src = e.getSource();
 
         if (src == returnButton) {
-            dispose(); // TODO check if any changes have been made?
+            if (preSaveMaze != maze) { // TODO overwrite maze .equals() so this works
+                int selection = JOptionPane.showConfirmDialog(this, "Changes have been made, do you want to return without saving?");
+                if (selection == JOptionPane.YES_OPTION) dispose();
+            }
         }
 
         if (src == saveButton) {
