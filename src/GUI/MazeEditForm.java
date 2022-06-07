@@ -227,11 +227,13 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         Maze checkMaze = source.getMaze(maze.getTitle());
         if (checkMaze.getTitle().equals("na")) { // "na" means the maze does not exist
             source.addMaze(maze);
+            preSaveMaze.setMaze(cloneMaze(maze.getMaze())); // Update the copy of the reference maze
             JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
         }
         else { // maze already exists
             if (checkMaze.getAuthor().equals(maze.getAuthor())) {
                 source.updateMaze(maze);
+                preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
                 JOptionPane.showMessageDialog(this, "Saved successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, "Cannot overwrite someone else's maze!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -294,17 +296,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void generateMaze()
     {
-
-//        int[][] startingMaze = new int[this.mazeWidth][this.mazeHeight];
-//
-//        for (int i = 0; i < this.mazeWidth; i++)
-//        {
-//            for (int j = 0; j < this.mazeHeight; j++)
-//            {
-//                startingMaze[i][j] = 0;
-//            }
-//        }
-
         maze.MazeGenerator(this.startingMaze,this.mazeWidth,this.mazeHeight);
         preSaveMaze.setMaze(cloneMaze(maze.getMaze()));
         System.out.println(maze.maze[2][2]);
@@ -447,6 +438,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
     }
 
+    /**
+     * Clones the 2d array representation of the maze
+     * @param original - original array that is being cloned
+     * @return - a cloned 2d array
+     */
     private int[][] cloneMaze(int[][] original) {
         int[][] clone = new int[original.length][];
         for (int i = 0; i < original.length; i++) {
