@@ -9,6 +9,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 
 import static GUI.DashForm.source;
 
@@ -23,7 +27,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private JLabel drawIcon, eraseIcon, selectIcon;
     private final String titleString;
     private JPanel mainPanel;
-    private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton;
+    private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton, exportButton;
     private JFileChooser fileChooser;
     private Maze maze;
     private Maze preSaveMaze;
@@ -38,6 +42,9 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private boolean randomCheck;
     private boolean childrensCheck;
     private final boolean preExisting;
+    private ImageIcon[] Logos =  new ImageIcon[100];
+    private int ImageIconCount = 0;
+    private int AddLogo = 0;
 
     private ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
     private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
@@ -179,7 +186,12 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             int returnValue = fileChooser.showOpenDialog(getContentPane());
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                System.out.println("Opening:" + file.getName());
+                System.out.println("Opening: " + file.getName());
+                System.out.println("Path: " + file.getAbsolutePath());
+                //BufferedImage bufferedImage = ImageIO.read(file2);
+                Logos[ImageIconCount] = createImageIcon(file.getAbsolutePath(),"logo");
+                ImageIconCount++;
+                AddLogo = 1;
             } else {
                 System.out.println("Open command cancelled by user.");
             }
@@ -195,6 +207,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         {
             setType = 2;
             System.out.println("Set End");
+        }
+
+        if (src == exportButton)
+        {
+            ExportMaze();
         }
 
         if (src == solveButton) {
@@ -234,7 +251,26 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 {
                     if(setType == 0)
                     {
-                        UpdateMazeBlock(mazeButtons[i][j],i,j);
+                        if (AddLogo == 1)
+                        {
+                            if (this.childrensCheck)
+                            {
+                                maze.maze[i][j] = 2;
+                            }
+                            else
+                            {
+                                maze.maze[i][j] = 0;
+                            }
+                            Image image = Logos[ImageIconCount].getImage();
+                            Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+                            Logos[ImageIconCount-1] = new ImageIcon(newimg);
+                            mazeButtons[i][j].setIcon(Logos[ImageIconCount-1]);
+                            AddLogo = 0;
+                        }
+                        else
+                        {
+                            UpdateMazeBlock(mazeButtons[i][j],i,j);
+                        }
                     }
                     else if(setType == 1)
                     {
@@ -248,6 +284,40 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                     }
                 }
             }
+        }
+    }
+
+    private void ExportMaze()
+    {
+        BufferedImage newImage = new BufferedImage(this.mazeWidth*this.cubeSize, this.mazeHeight*this.cubeSize,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = newImage.createGraphics();
+        for (int i = 0; i < this.mazeWidth; i++)
+        {
+            for (int j = 0; j < this.mazeHeight; j++)
+            {
+                Icon icon = mazeButtons[i][j].getIcon();
+
+                int w = icon.getIconWidth();
+                int h = icon.getIconHeight();
+                GraphicsEnvironment ge =
+                        GraphicsEnvironment.getLocalGraphicsEnvironment();
+                GraphicsDevice gd = ge.getDefaultScreenDevice();
+                GraphicsConfiguration gc = gd.getDefaultConfiguration();
+                BufferedImage image = gc.createCompatibleImage(w, h);
+                Graphics2D g = image.createGraphics();
+                icon.paintIcon(null, g, 0, 0);
+                g.dispose();
+
+                g2.drawImage(image, null, i*this.cubeSize, j*this.cubeSize);
+            }
+        }
+        g2.dispose();
+        File file = new File("images/Test.jpg");
+        try {
+            ImageIO.write(newImage, "jpg", file);
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -392,6 +462,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         solveButton = createButton("Solve");
         setStartButton = createButton("Set Start");
         setEndButton = createButton("Set End");
+        exportButton = createButton("Export");
 
         // Setup border layout
         mainPanel = new JPanel();
@@ -417,6 +488,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             .addComponent(setStartButton)
                             .addComponent(setEndButton)
                             .addComponent(separatorTop)
+                            .addComponent(exportButton)
                             .addComponent(saveButton)
                             .addComponent(saveAsButton)
                             .addComponent(returnButton))
@@ -433,6 +505,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                     .addComponent(setStartButton)
                     .addComponent(setEndButton)
                     .addComponent(separatorTop)
+                    .addComponent(exportButton)
                     .addComponent(saveButton)
                     .addComponent(saveAsButton)
                     .addComponent(returnButton)
