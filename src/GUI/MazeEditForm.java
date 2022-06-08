@@ -364,7 +364,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
 
     private void ExportMaze()
     {
-        BufferedImage newImage = new BufferedImage(this.mazeWidth*this.cubeSize, this.mazeHeight*this.cubeSize,BufferedImage.TYPE_INT_ARGB);
+        BufferedImage newImage = new BufferedImage(this.mazeWidth*this.cubeSize, this.mazeHeight*this.cubeSize,BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = newImage.createGraphics();
         for (int i = 0; i < this.mazeWidth; i++)
         {
@@ -387,9 +387,12 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             }
         }
         g2.dispose();
-        File file = new File("images/Test.jpg");
+
+        File file = new File("C:\\Users\\jamie\\Pictures\\test1.jpg");
         try {
+            file.createNewFile();
             ImageIO.write(newImage, "jpg", file);
+
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
             ex.printStackTrace();
