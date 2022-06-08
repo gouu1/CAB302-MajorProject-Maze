@@ -339,11 +339,11 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                                         up++;
                                     }
                                 }
-                            }
-                            System.out.println(i+" "+j+"Right: "+right +"Left: "+left+"up: "+up+"down: "+down + "SUM: " + (right+left+up+down));
-                            if (left+right+up+down <= 1)
-                            {
-                                deadEnds++;
+                                System.out.println(i+" "+j+"Right: "+right +"Left: "+left+"up: "+up+"down: "+down + "SUM: " + (right+left+up+down));
+                                if (left+right+up+down <= 1)
+                                {
+                                    deadEnds++;
+                                }
                             }
                         }
                     }
