@@ -44,6 +44,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private boolean childrensCheck;
     private final boolean preExisting;
     private ImageIcon[] Logos =  new ImageIcon[100];
+    private ImageIcon[] ChildrensLogos = new ImageIcon[2];
     private int ImageIconCount = 0;
     private int AddLogo = 0;
 
@@ -206,13 +207,13 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                     System.out.println("Opening: " + file.getName());
                     System.out.println("Path: " + file.getAbsolutePath());
                     Logos[ImageIconCount] = new ImageIcon(bufferedImage);
+                    System.out.println(Logos[ImageIconCount]);
                     ImageIconCount++;
                     AddLogo = 1;
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                //BufferedImage bufferedImage = ImageIO.read(file2);
-//                Logos[ImageIconCount] = createImageIcon(file.getAbsolutePath(),"logo");
+//
             } else {
                 System.out.println("Open command cancelled by user.");
             }
@@ -220,12 +221,54 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
 
         if (src == setStartButton)
         {
+            if (childrensCheck)
+            {
+                int returnValue = fileChooser.showOpenDialog(getContentPane());
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    BufferedImage bufferedImage = null;
+                    try {
+                        bufferedImage = ImageIO.read(file);
+                        System.out.println("Opening: " + file.getName());
+                        System.out.println("Path: " + file.getAbsolutePath());
+                        ChildrensLogos[0] = new ImageIcon(bufferedImage);
+                        System.out.println(ChildrensLogos[0]);
+                        AddLogo = 1;
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+//
+                } else {
+                    System.out.println("Open command cancelled by user.");
+                }
+            }
             setType = 1;
             System.out.println("Set Start");
         }
 
         if (src == setEndButton)
         {
+            if (childrensCheck)
+            {
+                int returnValue = fileChooser.showOpenDialog(getContentPane());
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    BufferedImage bufferedImage = null;
+                    try {
+                        bufferedImage = ImageIO.read(file);
+                        System.out.println("Opening: " + file.getName());
+                        System.out.println("Path: " + file.getAbsolutePath());
+                        ChildrensLogos[1] = new ImageIcon(bufferedImage);
+                        System.out.println(ChildrensLogos[1]);
+                        AddLogo = 1;
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+//
+                } else {
+                    System.out.println("Open command cancelled by user.");
+                }
+            }
             setType = 2;
             System.out.println("Set End");
         }
@@ -280,13 +323,14 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             }
                             else
                             {
+                                Image image = Logos[ImageIconCount-1].getImage();
+                                Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+                                Logos[ImageIconCount-1] = new ImageIcon(newimg);
+                                mazeButtons[i][j].setIcon(Logos[ImageIconCount-1]);
+                                AddLogo = 0;
                                 maze.maze[i][j] = 0;
                             }
-                            Image image = Logos[ImageIconCount].getImage();
-                            Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
-                            Logos[ImageIconCount-1] = new ImageIcon(newimg);
-                            mazeButtons[i][j].setIcon(Logos[ImageIconCount-1]);
-                            AddLogo = 0;
+
                         }
                         else
                         {
@@ -385,12 +429,34 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
         if(setType == 2)
         {
-            Button.setIcon(end);
+            if (childrensCheck)
+            {
+                Image image = ChildrensLogos[1].getImage();
+                Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+                ChildrensLogos[1] = new ImageIcon(newimg);
+                Button.setIcon(ChildrensLogos[1]);
+                AddLogo = 0;
+            }
+            else
+            {
+                Button.setIcon(end);
+            }
             maze.maze[i][j] = 2;
         }
         if(setType == 1)
         {
-            Button.setIcon(start);
+            if (childrensCheck)
+            {
+                Image image = ChildrensLogos[0].getImage();
+                Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+                ChildrensLogos[0] = new ImageIcon(newimg);
+                Button.setIcon(ChildrensLogos[0]);
+                AddLogo = 0;
+            }
+            else
+            {
+                Button.setIcon(start);
+            }
             maze.maze[i][j] = 2;
         }
     }
@@ -415,9 +481,16 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 }
             }
         }
-
-        mazeButtons[this.startPoint[0]][this.startPoint[1]].setIcon(start);
-        mazeButtons[this.endPoint[0]][this.endPoint[1]].setIcon(end);
+        if (childrensCheck)
+        {
+                mazeButtons[this.startPoint[0]][this.startPoint[1]].setIcon(ChildrensLogos[0]);
+                mazeButtons[this.endPoint[0]][this.endPoint[1]].setIcon(ChildrensLogos[1]);
+        }
+        else
+        {
+            mazeButtons[this.startPoint[0]][this.startPoint[1]].setIcon(start);
+            mazeButtons[this.endPoint[0]][this.endPoint[1]].setIcon(end);
+        }
 
         if (showSolution == 0)
         {
