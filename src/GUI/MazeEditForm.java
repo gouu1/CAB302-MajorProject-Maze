@@ -304,43 +304,44 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                 } else {
                     UpdateMazeDisplay(solvedMazeDisplay);
                     int deadEnds = 0;
-                    int cellsChecked = 0;
                     int cellCount = 0;
+                    int left = 0;
+                    int right = 0;
+                    int up = 0;
+                    int down = 0;
                     for (int i = 0; i < this.mazeWidth; i++) {
                         for (int j = 0; j < this.mazeHeight; j++)
                         {
                             cellCount = 0;
-                            if (i > 0)
-                            {
-                                if (maze.maze[i-1][j] == 2)
-                                {
-                                    cellCount++;
+                            left = 0;
+                            right = 0;
+                            up = 0;
+                            down = 0;
+                            if(maze.maze[i][j] == 2) {
+                                if (i > 0) {
+                                    if (maze.maze[i - 1][j] == 2) {
+                                        left++;
+                                    }
                                 }
-                            }
-                            if (i < this.mazeWidth-1)
-                            {
-                                if (maze.maze[i+1][j] == 2)
-                                {
-                                    cellCount++;
+                                if (i < this.mazeWidth - 1) {
+                                    if (maze.maze[i + 1][j] == 2) {
+                                        right++;
+                                    }
                                 }
-                            }
-                            if (j > 0)
-                            {
-                                if (maze.maze[i][j-1] == 2)
-                                {
-                                    cellCount++;
+                                if (j > 0) {
+                                    if (maze.maze[i][j - 1] == 2) {
+                                        down++;
+                                    }
                                 }
-                            }
 
-                            if (j < this.mazeHeight-1)
-                            {
-                                if (maze.maze[i][j+1] == 2)
-                                {
-                                    cellCount++;
+                                if (j < this.mazeHeight - 1) {
+                                    if (maze.maze[i][j + 1] == 2) {
+                                        up++;
+                                    }
                                 }
                             }
-                            System.out.println(cellCount);
-                            if (cellCount == 1)
+                            System.out.println(i+" "+j+"Right: "+right +"Left: "+left+"up: "+up+"down: "+down + "SUM: " + (right+left+up+down));
+                            if (left+right+up+down == 1)
                             {
                                 deadEnds++;
                             }
