@@ -49,7 +49,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
                         JOptionPane.ERROR_MESSAGE);
 
             // Check that the entries are within appropriate bounds
-            } else if ((Integer.parseInt(mazeX.getText()) < 10 || Integer.parseInt(mazeY.getText()) < 10 ||
+            } else if ((Integer.parseInt(mazeX.getText()) < 5 || Integer.parseInt(mazeY.getText()) < 5 ||
                     Integer.parseInt(mazeX.getText()) > 100 || Integer.parseInt(mazeY.getText()) > 100)) {
 
                 JOptionPane.showMessageDialog(this,
