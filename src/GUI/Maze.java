@@ -19,6 +19,7 @@ public class Maze {
     private String timeEdited;
     private String title, author;
     public int[][] maze;
+    public int totalcellspathed = 0;
     private final DateTimeFormatter myDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final DateTimeFormatter myDateTimeFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
@@ -106,6 +107,7 @@ public class Maze {
         {
             generateMaze(0, 0);
         }
+
     }
 
     /**
@@ -226,7 +228,8 @@ public class Maze {
         }
 
         if (Max_Iterations > 0) {
-            System.out.println(solvedMaze[endPoint[0]][endPoint[1]]);
+            //System.out.println(solvedMaze[endPoint[0]][endPoint[1]]);
+            this.totalcellspathed = solvedMaze[endPoint[0]][endPoint[1]];
 
             int[] nextPoint = {endPoint[0], endPoint[1]};
             int choice = 0;

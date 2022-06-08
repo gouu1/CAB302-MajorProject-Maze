@@ -303,6 +303,54 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             JOptionPane.ERROR_MESSAGE);
                 } else {
                     UpdateMazeDisplay(solvedMazeDisplay);
+                    int deadEnds = 0;
+                    int cellsChecked = 0;
+                    int cellCount = 0;
+                    for (int i = 0; i < this.mazeWidth; i++) {
+                        for (int j = 0; j < this.mazeHeight; j++)
+                        {
+                            cellCount = 0;
+                            if (i > 0)
+                            {
+                                if (maze.maze[i-1][j] == 2)
+                                {
+                                    cellCount++;
+                                }
+                            }
+                            if (i < this.mazeWidth-1)
+                            {
+                                if (maze.maze[i+1][j] == 2)
+                                {
+                                    cellCount++;
+                                }
+                            }
+                            if (j > 0)
+                            {
+                                if (maze.maze[i][j-1] == 2)
+                                {
+                                    cellCount++;
+                                }
+                            }
+
+                            if (j < this.mazeHeight-1)
+                            {
+                                if (maze.maze[i][j+1] == 2)
+                                {
+                                    cellCount++;
+                                }
+                            }
+                            System.out.println(cellCount);
+                            if (cellCount == 1)
+                            {
+                                deadEnds++;
+                            }
+                        }
+                    }
+
+
+                    JOptionPane.showMessageDialog(this,
+                            "Percent Explored: " + Math.round((((float)maze.totalcellspathed)/((float)(this.mazeWidth*this.mazeHeight)))*100.0)+" Dead Ends: " + deadEnds, "Maze information",
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }
