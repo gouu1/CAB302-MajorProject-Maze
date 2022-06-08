@@ -436,15 +436,22 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
         g2.dispose();
 
-        File file = new File("C:\\Users\\jamie\\Pictures\\test1.jpg");
-        try {
-            file.createNewFile();
-            ImageIO.write(newImage, "jpg", file);
+        int returnValue = fileChooser.showSaveDialog(getContentPane());
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+//            File file = new File("C:\\Users\\jamie\\Pictures\\test1.jpg");
+            try {
+                file.createNewFile();
+                ImageIO.write(newImage, "jpg", file);
 
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-            ex.printStackTrace();
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+                ex.printStackTrace();
+            }
+        } else {
+            System.out.println("Success");
         }
+
     }
 
     private void saveMaze() {
