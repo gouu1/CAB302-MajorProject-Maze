@@ -341,16 +341,24 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                                 }
                             }
                             System.out.println(i+" "+j+"Right: "+right +"Left: "+left+"up: "+up+"down: "+down + "SUM: " + (right+left+up+down));
-                            if (left+right+up+down == 1)
+                            if (left+right+up+down <= 1)
                             {
                                 deadEnds++;
                             }
                         }
                     }
-
+                    int wallcount = 0;
+                    for (int i = 0; i < this.mazeWidth; i++) {
+                        for (int j = 0; j < this.mazeHeight; j++) {
+                            if(maze.maze[i][j] == 0)
+                            {
+                                wallcount++;
+                            }
+                        }
+                    }
 
                     JOptionPane.showMessageDialog(this,
-                            "Percent Explored: " + Math.round((((float)maze.totalcellspathed)/((float)(this.mazeWidth*this.mazeHeight)))*100.0)+" Dead Ends: " + deadEnds, "Maze information",
+                            "Percent Explored: " + Math.round((((float)maze.totalcellspathed)/((float)((this.mazeWidth*this.mazeHeight)-wallcount)))*100.0)+" Dead Ends: " + deadEnds, "Maze information",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
             }
