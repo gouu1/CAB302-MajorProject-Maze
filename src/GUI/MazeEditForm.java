@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.lang.Math;
 
 import static GUI.DashForm.source;
 
@@ -49,6 +50,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     private ImageIcon blackSquare = createImageIcon("images/BlackSquare.png", "blackSquare");
     private ImageIcon greenSquare = createImageIcon("images/GreenSquare.png", "greenSquare");
     private ImageIcon whiteSquare = createImageIcon("images/WhiteSquare.png", "whiteSquare");
+    private ImageIcon start = createImageIcon("images/Start.png", "Start");
+    private ImageIcon end = createImageIcon("images/End.png", "End");
 
     /**
      * Constructor for use when opening a pre-existing maze from DB
@@ -114,6 +117,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      * Set-ups the maze scaling and gets the images for the buttons
      */
     private void setUpVisuals() {
+        this.cubeSize = Math.round(640/((mazeWidth+mazeHeight)/2));
+        /*
         if (mazeWidth <= 10 && mazeHeight <= 10) {
             this.cubeSize = 64;
         } else if (mazeWidth <= 20 && mazeHeight <= 20) {
@@ -125,6 +130,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         } else if (mazeWidth <= 100 && mazeHeight <= 100) {
             this.cubeSize = 6;
         }
+         */
         Image image = blackSquare.getImage();
         Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
         blackSquare = new ImageIcon(newimg);
@@ -136,6 +142,14 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         image = whiteSquare.getImage();
         newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
         whiteSquare = new ImageIcon(newimg);
+
+        image = start.getImage();
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+        start = new ImageIcon(newimg);
+
+        image = end.getImage();
+        newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
+        end = new ImageIcon(newimg);
     }
 
     private String getTitleString(String mazeName) {
@@ -274,12 +288,22 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                     }
                     else if(setType == 1)
                     {
+                        if (this.startPoint != null)
+                        {
+                            mazeButtons[this.startPoint[0]][this.startPoint[1]].setIcon(whiteSquare);
+                        }
                         this.startPoint = new int[] {i,j};
+                        UpdateMazeBlock(mazeButtons[i][j],i,j);
                         setType = 0;
                     }
                     else if(setType == 2)
                     {
+                        if (this.endPoint != null)
+                        {
+                            mazeButtons[this.endPoint[0]][this.endPoint[1]].setIcon(whiteSquare);
+                        }
                         this.endPoint = new int[] {i,j};
+                        UpdateMazeBlock(mazeButtons[i][j],i,j);
                         setType = 0;
                     }
                 }
@@ -352,6 +376,16 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             maze.maze[i][j] = 0;
             Button.setIcon(blackSquare);
         }
+        if(setType == 2)
+        {
+            Button.setIcon(end);
+            maze.maze[i][j] = 2;
+        }
+        if(setType == 1)
+        {
+            Button.setIcon(start);
+            maze.maze[i][j] = 2;
+        }
     }
     /**
      * Iterates through the maze and creates green path for maze cells that have been marked as
@@ -360,26 +394,24 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     public void UpdateMazeDisplay(int[][] solvedMazeDisplay)
     {
-        for (int i = 0; i < this.mazeWidth; i++)
-        {
-            for (int j = 0; j < this.mazeHeight; j++)
-            {
-                if (showSolution == 0)
-                {
-                    if (solvedMazeDisplay[i][j] == 1)
-                    {
+        for (int i = 0; i < this.mazeWidth; i++) {
+            for (int j = 0; j < this.mazeHeight; j++) {
+                if (showSolution == 0) {
+                    if (solvedMazeDisplay[i][j] == 1) {
                         mazeButtons[i][j].setIcon(greenSquare);
                     }
                 }
-                if (showSolution == 1)
-                {
-                    if (solvedMazeDisplay[i][j] != 0)
-                    {
+                if (showSolution == 1) {
+                    if (solvedMazeDisplay[i][j] != 0) {
                         mazeButtons[i][j].setIcon(whiteSquare);
                     }
                 }
             }
         }
+
+        mazeButtons[this.startPoint[0]][this.startPoint[1]].setIcon(start);
+        mazeButtons[this.endPoint[0]][this.endPoint[1]].setIcon(end);
+
         if (showSolution == 0)
         {
             showSolution = 1;
