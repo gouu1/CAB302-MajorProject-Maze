@@ -200,12 +200,19 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             int returnValue = fileChooser.showOpenDialog(getContentPane());
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                System.out.println("Opening: " + file.getName());
-                System.out.println("Path: " + file.getAbsolutePath());
+                BufferedImage bufferedImage = null;
+                try {
+                    bufferedImage = ImageIO.read(file);
+                    System.out.println("Opening: " + file.getName());
+                    System.out.println("Path: " + file.getAbsolutePath());
+                    Logos[ImageIconCount] = new ImageIcon(bufferedImage);
+                    ImageIconCount++;
+                    AddLogo = 1;
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 //BufferedImage bufferedImage = ImageIO.read(file2);
-                Logos[ImageIconCount] = createImageIcon(file.getAbsolutePath(),"logo");
-                ImageIconCount++;
-                AddLogo = 1;
+//                Logos[ImageIconCount] = createImageIcon(file.getAbsolutePath(),"logo");
             } else {
                 System.out.println("Open command cancelled by user.");
             }
