@@ -103,7 +103,6 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
 
         px1 = new JLabel("px");
         px2 = new JLabel("px");
-        imageLabel = new JLabel("No image selected.");
 
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -119,9 +118,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
                                 .addComponent(mazeX)
                                 .addComponent(px1)
                                 .addComponent(mazeY)
-                                .addComponent(px2))
-                        .addComponent(addLogoButton)
-                        .addComponent(imageLabel))
+                                .addComponent(px2)))
         );
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -134,9 +131,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
                 .addComponent(randomCheck)
 
                 .addGroup(layout.createParallelGroup()
-                        .addComponent(newMazeButton)
-                        .addComponent(addLogoButton))
-                .addComponent(imageLabel)
+                        .addComponent(newMazeButton))
         );
         repaint();
         setVisible(true);
