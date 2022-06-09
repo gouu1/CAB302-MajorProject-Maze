@@ -10,14 +10,13 @@ import java.awt.event.ActionListener;
  * The main GUI form which will spawn all subsequent forms and handle the event listening.
  */
 public class DashForm extends JFrame implements ActionListener, Runnable {
+    private static final String TITLE = "MazeCo";
     public static final int WIDTH = 350;
     public static final int HEIGHT = 350;
     public static final int PANELS = 4;
     public static final int FONT_SIZE = 24;
     private JPanel[] panels;
     private JButton exitButton, exportButton, newButton, openButton;
-    private JLabel title;
-    private JFileChooser fc;
     public static JDBCMazeDataSource source = new JDBCMazeDataSource();
 
     /**
@@ -74,18 +73,13 @@ public class DashForm extends JFrame implements ActionListener, Runnable {
             e.printStackTrace();
         }
 
-        setTitle("Maze designer - Dashboard");
+        setTitle("Dashboard");
         setSize(WIDTH, HEIGHT);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Creates a file chooser that opens on detail view by default
-        fc = new JFileChooser();
-        Action details = fc.getActionMap().get("viewTypeDetails");
-        details.actionPerformed(null);
-
-        title = new JLabel("MazeCo");
+        JLabel title = new JLabel(TITLE);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
 

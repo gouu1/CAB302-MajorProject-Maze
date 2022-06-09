@@ -12,7 +12,7 @@ import java.util.Arrays;
 import static GUI.DashForm.source;
 
 /**
- * Helper for opening image files
+ * Handles interacting with database
  */
 public class OpenFileDialog extends JDialog implements ActionListener, Runnable {
     public static final int WIDTH = 700;
@@ -42,10 +42,14 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            };
+            }
         };
     }
 
+    /**
+     * Parses the data from the database in a way that can be used by the table component
+     * @return Object[][] that contains all of the current
+     */
     private Object[][] initData() {
         ArrayList<String[]> temp = source.getMazeList(); // gets the data from the database
         Object[][] data = new Object[temp.size()][COLUMN_NAMES.length];
@@ -58,6 +62,10 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         return data;
     }
 
+    /**
+     * Event listener for the Open file dialog window
+     * @param e - the event which has occurred
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
@@ -121,6 +129,11 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         setVisible(true);
     }
 
+    /**
+     * Creates button with given text and dimensions and adds listener.
+     * @param text - text to be displayed on button
+     * @return - Button element
+     */
     private JButton createButton(String text) {
         JButton myButton = new JButton(text);
         Dimension buttonDim = new Dimension(100, 30);
@@ -129,6 +142,10 @@ public class OpenFileDialog extends JDialog implements ActionListener, Runnable 
         return myButton;
     }
 
+    /**
+     * Picks which button to display on the dialog window depending on the mode it was opened in.
+     * @return - A button element to either Open mazes, or export them
+     */
     private JButton getSelection() {
         return switch (mode) {
             case OPEN -> getRowButton = createButton("Open maze");

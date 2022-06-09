@@ -16,9 +16,8 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
     public static final int HEIGHT = 175;
     private JCheckBox childrenCheck, randomCheck;
     private JTextField mazeNameField, mazeX, mazeY;
-    private JButton newMazeButton, addLogoButton;
+    private JButton newMazeButton;
     private JLabel px1, px2, imageLabel;
-    private JFileChooser fc;
 
     public NewMazeDialog(JFrame parent, String title, boolean modality) {
         super(parent, title, modality);
@@ -27,16 +26,6 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
-
-        if (src == addLogoButton) { //TODO Consolidate all logo pickers into their own class to reduce repeat code
-            int returnValue = fc.showOpenDialog(getContentPane());
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                System.out.println("Opening:" + file.getName());
-            } else {
-                System.out.println("Open command cancelled by user.");
-            }
-        }
 
         if (src == newMazeButton) {
             // Check the entries are valid
@@ -86,7 +75,7 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(getContentPane());
-        fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser();
         Action details = fc.getActionMap().get("viewTypeDetails");
         details.actionPerformed(null);
 
@@ -94,7 +83,6 @@ public class NewMazeDialog extends JDialog implements ActionListener, Runnable {
         randomCheck = new JCheckBox("Randomized maze");
 
         newMazeButton = createButton("New Maze");
-        addLogoButton = createButton("Add Logo");
 
         mazeNameField = new JTextField("Add maze name here...");
         mazeNameField.setMinimumSize(new Dimension(200, 20));

@@ -119,19 +119,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      */
     private void setUpVisuals() {
         this.cubeSize = Math.round(640/((mazeWidth+mazeHeight)/2));
-        /*
-        if (mazeWidth <= 10 && mazeHeight <= 10) {
-            this.cubeSize = 64;
-        } else if (mazeWidth <= 20 && mazeHeight <= 20) {
-            this.cubeSize = 32;
-        } else if (mazeWidth <= 40 && mazeHeight <= 40) {
-            this.cubeSize = 16;
-        } else if (mazeWidth <= 80 && mazeHeight <= 80) {
-            this.cubeSize = 8;
-        } else if (mazeWidth <= 100 && mazeHeight <= 100) {
-            this.cubeSize = 6;
-        }
-         */
+
         Image image = blackSquare.getImage();
         Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
         blackSquare = new ImageIcon(newimg);
@@ -387,7 +375,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                                 AddLogo = 0;
                                 maze.maze[i][j] = 0;
                             }
-
                         }
                         else
                         {
@@ -419,6 +406,10 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
     }
 
+    /**
+     * Draws each maze icon and stitches them together into one final image which is then saved.
+     * The user can then select which directory to save the image file and to overwrite a file or name a new one.
+     */
     private void ExportMaze()
     {
         BufferedImage newImage = new BufferedImage(this.mazeWidth*this.cubeSize, this.mazeHeight*this.cubeSize,BufferedImage.TYPE_INT_RGB);
@@ -448,21 +439,24 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         int returnValue = fileChooser.showSaveDialog(getContentPane());
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-//            File file = new File("C:\\Users\\jamie\\Pictures\\test1.jpg");
             try {
                 file.createNewFile();
                 ImageIO.write(newImage, "jpg", file);
+                JOptionPane.showMessageDialog(this, "Successfully exported", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (IOException ex) {
                 System.err.println(ex.getMessage());
                 ex.printStackTrace();
             }
-        } else {
-            System.out.println("Success");
         }
-
     }
 
+    /**
+     * Saves mazes to the database, this function also updates the time last edited and decides to either create
+     * a new maze if one does not exist already, or update the existing maze.
+     *
+     * The final check ensures that user's cannot overwrite another author's maze of the same name.
+     */
     private void saveMaze() {
         maze.setTimeEdited(LocalDateTime.now());
         Maze checkMaze = source.getMaze(maze.getTitle());
@@ -482,7 +476,14 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
     }
 
-    public void UpdateMazeBlock(JButton Button,int i, int j)
+    /**
+     * Updates a maze block on click, toggling its status as a wall or path.
+     * Also sets the children's icons
+     * @param Button - Button to be updated
+     * @param i - x position of the button
+     * @param j - y position of the button
+     */
+    public void UpdateMazeBlock(JButton Button, int i, int j)
     {
         if (maze.maze[i][j] == 0)
         {
@@ -527,6 +528,7 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
             maze.maze[i][j] = 2;
         }
     }
+
     /**
      * Iterates through the maze and creates green path for maze cells that have been marked as
      * the solution of the maze.
@@ -695,13 +697,22 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         setVisible(true);
     }
 
-    public JFileChooser makeFileChooser() {
+    /**
+     * Creates a file chooser element which shows the detail view by default
+     * @return - File chooser element
+     */
+    private JFileChooser makeFileChooser() {
         JFileChooser fc = new JFileChooser();
         Action details = fc.getActionMap().get("viewTypeDetails");
         details.actionPerformed(null);
         return fc;
     }
 
+    /**
+     * Creates a button element with a corresponding event listener
+     * @param title - text to be displayed on the button
+     * @return - Button element
+     */
     private JButton createButton(String title) {
         JButton myButton = new JButton(title);
         myButton.addActionListener(this);
@@ -709,7 +720,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     }
 
     /** Returns an ImageIcon, or null if the path was invalid.
-     *  Retrieved from https://docs.oracle.com/javase/tutorial/uiswing/components/icon.html */
+     *  Retrieved from https://docs.oracle.com/javase/tutorial/uiswing/components/icon.html
+     */
     protected ImageIcon createImageIcon(String path,
                                         String description) {
         java.net.URL imgURL = getClass().getResource(path);

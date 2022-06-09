@@ -228,7 +228,6 @@ public class Maze {
         }
 
         if (Max_Iterations > 0) {
-            //System.out.println(solvedMaze[endPoint[0]][endPoint[1]]);
             this.totalcellspathed = solvedMaze[endPoint[0]][endPoint[1]];
 
             int[] nextPoint = {endPoint[0], endPoint[1]};
@@ -279,7 +278,7 @@ public class Maze {
     }
 
     /**
-     *
+     * Enum describing directions
      */
     private enum DIR {
         N(1, 0, -1), S(2, 0, 1), E(4, 1, 0), W(8, -1, 0);

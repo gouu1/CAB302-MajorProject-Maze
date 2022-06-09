@@ -11,7 +11,7 @@ import java.util.Properties;
 public class DBConnection {
 
    /**
-    * The singleton instance of the database connection.
+    * The singleton instance of the database connection. Shamelessly taken from the DB practical
     */
    private static Connection instance = null;
 
@@ -20,7 +20,7 @@ public class DBConnection {
     */
    private DBConnection() {
       Properties props = new Properties();
-      FileInputStream in = null;
+      FileInputStream in;
       try {
          in = new FileInputStream("db.props");
          props.load(in);
