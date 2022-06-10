@@ -23,7 +23,8 @@ public class JDBCMazeDataSource {
                     "dateLastModified VARCHAR(30)," +
                     "dateCreated VARCHAR(30)" + ");";
 
-    private static final String INSERT_MAZE = "INSERT INTO mazes (mazeData, title, author, dateLastModified, dateCreated) VALUES (?, ?, ?, ?, ?);";
+    private static final String INSERT_MAZE =
+            "INSERT INTO mazes (mazeData, title, author, dateLastModified, dateCreated) VALUES (?, ?, ?, ?, ?);";
     private static final String GET_MAZE = "SELECT * FROM mazes WHERE title=?";
     private static final String GET_ALL = "SELECT title, author, dateLastModified, dateCreated FROM mazes";
     private static final String DELETE_MAZE = "DELETE FROM mazes WHERE title=?";

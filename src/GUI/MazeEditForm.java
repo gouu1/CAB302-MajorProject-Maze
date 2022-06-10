@@ -25,7 +25,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
     public static final int HEIGHT = 700;
     private static final int FONT_SIZE = 16;
     private String author;
-    private JLabel drawIcon, eraseIcon, selectIcon;
     private final String titleString;
     private JPanel mainPanel;
     private JButton addLogoButton, returnButton, saveButton, saveAsButton, solveButton, setStartButton, setEndButton, exportButton;
@@ -636,10 +635,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         JLabel titleLabel = new JLabel("Tools");
         titleLabel.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
 
-        drawIcon = new JLabel(draw);
-        eraseIcon = new JLabel(erase);
-        selectIcon = new JLabel(select);
-
         // Make separator
         JSeparator separatorTop = new JSeparator();
 
@@ -668,10 +663,8 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         toolsLayout.setAutoCreateContainerGaps(true);
 
         toolsLayout.setHorizontalGroup(toolsLayout.createSequentialGroup()
-                    .addComponent(drawIcon)
                     .addGroup(toolsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                             .addComponent(titleLabel)
-                            .addComponent(eraseIcon)
                             .addComponent(addLogoButton)
                             .addComponent(solveButton)
                             .addComponent(setStartButton)
@@ -681,14 +674,10 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                             .addComponent(saveButton)
                             .addComponent(saveAsButton)
                             .addComponent(returnButton))
-                    .addComponent(selectIcon)
         );
         toolsLayout.setVerticalGroup(toolsLayout.createSequentialGroup()
                     .addComponent(titleLabel)
-                    .addGroup(toolsLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(drawIcon)
-                            .addComponent(eraseIcon)
-                            .addComponent(selectIcon))
+                    .addGroup(toolsLayout.createParallelGroup(GroupLayout.Alignment.LEADING))
                     .addComponent(addLogoButton)
                     .addComponent(solveButton)
                     .addComponent(setStartButton)
@@ -700,7 +689,6 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
                     .addComponent(returnButton)
         );
 
-        toolsLayout.linkSize(SwingConstants.CENTER, eraseIcon, titleLabel);
 
         setVisible(true);
     }
