@@ -118,7 +118,15 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
      * Set-ups the maze scaling and gets the images for the buttons
      */
     private void setUpVisuals() {
-        this.cubeSize = Math.round(640/((mazeWidth+mazeHeight)/2));
+        if (mazeWidth > mazeHeight)
+        {
+            this.cubeSize = Math.round(640/((mazeWidth)));
+        }
+        else
+        {
+            this.cubeSize = Math.round(640/((mazeHeight)));
+        }
+
 
         Image image = blackSquare.getImage();
         Image newimg = image.getScaledInstance(this.cubeSize, this.cubeSize, java.awt.Image.SCALE_SMOOTH);
