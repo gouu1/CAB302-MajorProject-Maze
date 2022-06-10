@@ -609,6 +609,9 @@ public class MazeEditForm extends JFrame implements ActionListener, Runnable {
         }
     }
 
+    /**
+     * Generates the graphical user interface where the maze and the buttons will be displayed on.
+     */
     public void createGUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

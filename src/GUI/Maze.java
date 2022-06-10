@@ -32,34 +32,65 @@ public class Maze {
         timeEdited = LocalDateTime.now().format(myDateTimeFormat);
     }
 
+    /**
+     * Sets the size of the maze in the X direction
+     * @param x - The size of the maze in the X direction
+     */
     public void setX(int x) {
         this.x = x;
     }
-
+    /**
+     * Sets the size of the maze in the Y direction
+     * @param y - The size of the maze in the Y direction
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * Returns the title of the maze
+     * @return - The title of the maze
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Returns the author of the maze
+     * @return - The author of the maze
+     */
     public String getAuthor() {
         return author;
     }
 
+    /**
+     * Returns the time when the maze was created as a string
+     * @return - The time when the maze was created
+     */
     public String getTimeCreated() {
         return timeCreated;
     }
 
+    /**
+     * Returns the time when the maze was last edited
+     * @return - The time when the maze was last edited
+     */
     public String getTimeEdited() {
         return timeEdited;
     }
 
+    /**
+     * Returns the two-dimensional array that contains the maze
+     * @return - The maze
+     */
     public int[][] getMaze() {
         return maze;
     }
 
+    /**
+     * Sets the title of the maze
+     * @param title - The title of the maze
+     */
     public void setTitle(String title) {
         this.title = title;
     }
@@ -68,24 +99,41 @@ public class Maze {
         this.timeCreated = timeCreated.format(myDateFormat);
     }
 
+    /**
+     * Sets the time when the maze was created
+     * @param timeCreated   - A string containing the time when the maze was created
+     */
     // Overload of other function for use in DB
     public void setTimeCreated(String timeCreated) {
         this.timeCreated = timeCreated;
     }
 
+
     public void setTimeEdited(LocalDateTime timeEdited) {
         this.timeEdited = timeEdited.format(myDateTimeFormat);
     }
 
+    /**
+     * Sets the time when the maze was last edited
+     * @param timeEdited - A string containing the time when the maze was last edited
+     */
     // Overload of other function for use in DB
     public void setTimeEdited(String timeEdited) {
         this.timeEdited = timeEdited;
     }
 
+    /**
+     * Sets the author of the maze
+     * @param author - The author of the maze
+     */
     public void setAuthor(String author) {
         this.author = author;
     }
 
+    /**
+     * Sets the two-dimensional array that contains the maze itself
+     * @param maze - A two-dimensional int array
+     */
     public void setMaze(int[][] maze) {
         this.maze = maze;
     }
